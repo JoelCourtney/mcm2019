@@ -15,10 +15,14 @@ namespace EdgeType {
 }
 
 struct Edge {
-	int w;
+	int c; // capacity of each pseudo node
+	int w; // width of doorways
+	int n; // number of pseudo nodes on edge
+
+	int type;
 
 	Node* from;
 	Node* to;
 
-	int type;
+	Edge(int, int, int, int, Node*, Node*);
 };

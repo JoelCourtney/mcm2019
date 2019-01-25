@@ -11,4 +11,6 @@ class Graph {
 public:
 	void addNode(Node);
 	void addEdge(Edge);
+
+	Node* getNode(int);
 };
