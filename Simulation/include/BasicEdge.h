@@ -1,9 +1,9 @@
 #pragma once
 
 #include <vector>
-#include "Node.h"
+#include "BasicNode.h"
 
-struct Node;
+struct BasicNode;
 
 namespace EdgeType {
 	enum {
@@ -14,15 +14,15 @@ namespace EdgeType {
 	};
 }
 
-struct Edge {
+struct BasicEdge {
 	int c; // capacity of each pseudo node
 	int w; // width of doorways
 	int n; // number of pseudo nodes on edge
 
 	int type;
 
-	Node* from;
-	Node* to;
+	BasicNode* from;
+	BasicNode* to;
 
-	Edge(int, int, int, int, Node*, Node*);
+	BasicEdge(int, int, int, int, BasicNode*, BasicNode*);
 };
