@@ -15,7 +15,6 @@ class CSVReader {
 		int type;
 		float area;
 		float doorwidth;
-		int nrooms;
 	};
 	struct EdgeLine {
 		int fromID;

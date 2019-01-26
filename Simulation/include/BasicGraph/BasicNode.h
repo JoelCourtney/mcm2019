@@ -8,7 +8,8 @@ namespace BasicNodeType {
 		Exit = 0,
 		Escalator = -1,
 		Elevator = -2,
-		DisabledElevator = -3
+		DisabledElevator = -3,
+		Danger = -4
 	};
 }
 
@@ -25,11 +26,10 @@ struct BasicNode {
 
 	float area;
 	float doorwidth;
-	int nrooms;
 
-	std::vector<BasicEdge*> adj;
+	std::vector<int> adj;
 
-	BasicNode(int, float, float, float, int, float, float, int);
+	BasicNode(int, float, float, float, int, float, float);
 
 	void print();
 };

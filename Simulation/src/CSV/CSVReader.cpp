@@ -24,8 +24,7 @@ BasicGraph CSVReader::buildBasicGraph() {
 			nodeLine.z,
 			nodeLine.type,
 			nodeLine.area,
-			nodeLine.doorwidth,
-			nodeLine.nrooms
+			nodeLine.doorwidth
 		);
 		g.addNode(n);
 	}
@@ -34,8 +33,8 @@ BasicGraph CSVReader::buildBasicGraph() {
 	while (std::getline(edgeStream,line)) {
 		EdgeLine edgeLine = readEdgeLine(line);
 		BasicEdge e(
-			g.getNode(edgeLine.fromID),
-			g.getNode(edgeLine.toID)
+			edgeLine.fromID,
+			edgeLine.toID
 		);
 		g.addEdge(e);
 	}
@@ -51,17 +50,17 @@ CSVReader::NodeLine CSVReader::readNodeLine(std::string line) {
 	getline(lineStream, dump, ',');
 	nl.x = stof(dump);
 	getline(lineStream, dump, ',');
+	std::cout << "read " << dump << std::endl;
 	nl.y = stof(dump);
+	std::cout << "pasted " << nl.y << std::endl;
 	getline(lineStream, dump, ',');
 	nl.z = stof(dump);
 	getline(lineStream, dump, ',');
 	nl.type = stoi(dump);
 	getline(lineStream, dump, ',');
-	nl.area = stof(dump);
-	getline(lineStream, dump, ',');
 	nl.doorwidth = stof(dump);
 	getline(lineStream, dump, ',');
-	nl.nrooms = stoi(dump);
+	nl.area = stof(dump);
 	return nl;
 }
 

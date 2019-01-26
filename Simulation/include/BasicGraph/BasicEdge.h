@@ -15,10 +15,12 @@ struct BasicNode;
 //}
 
 struct BasicEdge {
-	BasicNode* from;
-	BasicNode* to;
+	int fromID;
+	int toID;
 
-	BasicEdge(BasicNode*, BasicNode*);
+	float distance;
+
+	BasicEdge(int,int);
 
 	void print();
 };
