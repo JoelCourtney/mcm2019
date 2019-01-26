@@ -1,7 +1,7 @@
 #include <iostream>
-#include "BasicGraph.h"
+#include "BasicGraph/BasicGraph.h"
 #include <iostream>
-#include "Graph.h"
+#include "Graph/Graph.h"
 
 int main() {
 	//BasicNode n1(1.0, -1.0, 2);
@@ -18,30 +18,36 @@ int main() {
 	/////////////
 	
 	Exhibit* n = new Exhibit(0, 0, 0, 0, 10);
+	Escalator* e = new Escalator(0,0,0,0,5,5);
 	Exit* m = new Exit(1, 1, 2, 0);
-	Door* d = new Door(2);
-	Passage p(d, m);
-	Directions dir;
-	dir.normal = p;
-	n->setDirections(dir);
+	Door* d1 = new Door(3);
+	Door* d2 = new Door(3);
+	Passage p1(d1, e);
+	Passage p2(d2, m);
+	Directions dir1;
+	dir1.normal = p1;
+	Directions dir2;
+	dir2.normal = p2;
+	n->setDirections(dir1);
+	e->setDirections(dir2);
 
 	Graph g;
 	g.addNode(m);
 	g.addNode(n);
-	g.addDoor(d);
+	g.addNode(e);
+	g.addDoor(d1);
+	g.addDoor(d2);
 
-	Tourist* t1 = new Tourist();
-	Tourist* t2 = new Tourist();
-	Tourist* t3 = new Tourist();
+	Tourist* t1 = new Tourist(1);
+	Tourist* t2 = new Tourist(1);
+	Tourist* t3 = new Tourist(1);
 	n->enter(t1);
 	n->enter(t2);
 	n->enter(t3);
 
 	g.print();
-	g.update();
-	g.print();
-	g.update();
-	g.print();
-	g.update();
-	g.print();
+	for (int i = 0; i < 20; i++) {
+		g.update();
+		g.print();
+	}
 };

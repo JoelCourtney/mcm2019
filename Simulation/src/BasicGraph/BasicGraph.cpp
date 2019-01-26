@@ -1,4 +1,4 @@
-#include "BasicGraph.h"
+#include "BasicGraph/BasicGraph.h"
 
 void BasicGraph::addNode(BasicNode n) {
 	nodes.push_back(n);

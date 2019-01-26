@@ -1,7 +1,7 @@
 #pragma once
 
-#include "PersonType.h"
-#include "Directions.h"
+#include "Person/PersonType.h"
+#include "Graph/Directions.h"
 #include <vector>
 #include <tuple>
 
@@ -63,30 +63,38 @@ class Danger: Exhibit {
 	
 };
 
-class Elevator: Node {
+class Elevator: public Node {
 	int capacity;
 	int used;
 
 	int waitTime;
-	bool moving;
+	bool moving = false;
 	const int waitLimit;
+
+public:
+	Elevator(int,float,float,float,int,int);
 
 	void update();
 	bool canEnter(int);
 	void enter(Person*);
 
+	void print();
 };
 
-class Escalator: Node {
+class Escalator: public Node {
 	int capacity;
 	int used;
 
 	const int waitLimit;
 	std::vector<int> waitTimes;
+
+public:
+	Escalator(int,float,float,float,int,int);
 	
 	void update();
 	bool canEnter(int);
 	void enter(Person*);
 
+	void print();
 };
 

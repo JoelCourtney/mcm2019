@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "BasicGraph.h"
+#include "BasicGraph/BasicGraph.h"
 #include "Node.h"
 #include "Door.h"
 

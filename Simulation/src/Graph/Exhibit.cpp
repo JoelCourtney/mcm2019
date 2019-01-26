@@ -1,5 +1,5 @@
-#include "Node.h"
-#include "Person.h"
+#include "Graph/Node.h"
+#include "Person/Person.h"
 #include <iostream>
 
 Exhibit::Exhibit(int ID, float x_, float y_, float z_, int c) : capacity(c), Node(ID,x_,y_,z_) {}
@@ -7,6 +7,7 @@ Exhibit::Exhibit(int ID, float x_, float y_, float z_, int c) : capacity(c), Nod
 void Exhibit::update() {
 	int peopleLength = people.size();
 	for (int i = 0; i < peopleLength;) {
+		std::cout << people.at(i)->type << std::endl;
 		if (people.at(i)->move(&directions)) {
 			people.erase(people.begin() + i);
 			used--;

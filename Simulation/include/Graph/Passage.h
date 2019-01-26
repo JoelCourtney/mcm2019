@@ -1,7 +1,7 @@
 #pragma once
 
 #include <tuple>
-#include "Person.h"
+#include "Person/Person.h"
 #include "Door.h"
 
 class Node;

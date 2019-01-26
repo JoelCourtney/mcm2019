@@ -1,4 +1,4 @@
-#include "Node.h"
+#include "Graph/Node.h"
 #include <iostream>
 
 Exit::Exit(int ID, float x_, float y_, float z_) : Node(ID,x_,y_,z_) {}

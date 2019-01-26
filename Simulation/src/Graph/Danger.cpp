@@ -1,4 +1,4 @@
-#include "Node.h"
+#include "Graph/Node.h"
 
 void Danger::update() {
 	Exhibit::update();
