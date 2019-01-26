@@ -20,9 +20,9 @@ while 1
         plot(xc,yc,'r*')
         if t>0
             [xd,yd]=ginput(2);
-            dw=max(abs(xd(1)-xd(2)),abs(yd(1)-yd(2)))
+            dw=max(abs(xd(1)-xd(2)),abs(yd(1)-yd(2)));
         else
-            dw=str2num(cell2mat(inputdlg('Enter Door Width:','Input',[1 15],{'2'})));
+            dw=str2num(cell2mat(inputdlg('Enter Door Width:','Input',[1 20],{'2'})));
         end
     else
         nc=1;

@@ -1,15 +1,15 @@
 clear all; close all; clc;
 
-%f0 = imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\0.jpg'),-90),0.5);
+f = imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\0.jpg'),-90),0.5); %f0
 %f1 = imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\1.jpg'),-90),0.5);
 %f2 = imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\2.jpg'),-90),0.5);
-f = imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\_1.jpg'),-90),0.5);  %f_1.
+%f_1= imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\_1.jpg'),-90),0.5);
 %f_2 = imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\_2.jpg'),-90),0.5);
 
-z=-1;
+z=0;
 image(f);
 hold on
-nid=45;
+nid=126;
 while 1
     t=str2num(cell2mat(inputdlg('Enter Node Type:')));
     if t
@@ -36,7 +36,7 @@ while 1
         break
     end
     A=polyarea(x,y);
-    M_1(nid-44,1:15)=[nid,xc,yc,z,t,dw,A,x',y'];
+    M0(nid-125,1:15)=[nid,xc,yc,z,t,dw,A,x',y'];
     nid=nid+1;
 end
-csvwrite('nodes_1.csv',M_1)
+csvwrite('nodes0.csv',M0)
