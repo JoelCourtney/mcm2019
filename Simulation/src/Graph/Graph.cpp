@@ -11,8 +11,7 @@ Graph::~Graph() {
 }
 
 void Graph::update() {
-	std::cout << "Ticking:\n";
-	for (int i = 0; i < nodes.size(); i++) {
+	for (int i = nodes.size() - 1; i >= 0; i--) {
 		nodes.at(i)->update();
 	}
 	for (int i = 0; i < doors.size(); i++) {

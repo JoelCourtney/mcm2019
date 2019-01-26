@@ -7,7 +7,6 @@ Exhibit::Exhibit(int ID, float x_, float y_, float z_, int c) : capacity(c), Nod
 void Exhibit::update() {
 	int peopleLength = people.size();
 	for (int i = 0; i < peopleLength;) {
-		std::cout << people.at(i)->type << std::endl;
 		if (people.at(i)->move(&directions)) {
 			people.erase(people.begin() + i);
 			used--;
@@ -28,5 +27,6 @@ void Exhibit::enter(Person* person) {
 }
 
 void Exhibit::print() {
-	std::cout << "ID: " << nodeID << ". " << used << " people are currently here." << std::endl;
+	//if (people.size() > 0)
+		std::cout << "ID: " << nodeID << ". " << used << " people are currently here." << std::endl;
 }

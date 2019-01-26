@@ -31,7 +31,7 @@ public:
 class Exhibit: public Node {
 protected:
 	int capacity;
-	int used;
+	int used = 0;
 	std::vector<std::tuple<int,int>> reserved;
 
 public:

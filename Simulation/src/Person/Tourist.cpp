@@ -3,7 +3,7 @@
 #include <iostream>
 
 Tourist::Tourist(int ID): groupID(ID) {}
-Tourist::~Tourist() {std::cout << "bye\n";}
+Tourist::~Tourist() {}
 
 bool Tourist::move(Directions* dir) {
 	return dir->normal.moveIfPossible(groupID, this);

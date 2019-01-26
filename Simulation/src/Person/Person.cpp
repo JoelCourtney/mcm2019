@@ -2,5 +2,5 @@
 #include <iostream>
 
 Person::~Person() {
-	std::cout << "top delete\n";
+	//std::cout << "freedom!\n";
 }

@@ -1,3 +1,8 @@
 #include "BasicGraph/BasicEdge.h"
+#include <iostream>
 
-BasicEdge::BasicEdge(int c_, int w_, int n_, int type_, BasicNode* from_, BasicNode* to_) : c(c_), w(w_), n(n_), type(type_), from(from_), to(to_) {}
+BasicEdge::BasicEdge(BasicNode* from_, BasicNode* to_) : from(from_), to(to_) {}
+
+void BasicEdge::print() {
+	std::cout << from->nodeID << "->" << to->nodeID << std::endl;
+}
