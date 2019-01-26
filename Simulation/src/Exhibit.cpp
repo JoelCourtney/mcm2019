@@ -1,4 +1,8 @@
 #include "Node.h"
+#include "Person.h"
+#include <iostream>
+
+Exhibit::Exhibit(int ID, float x_, float y_, float z_, int c) : capacity(c), Node(ID,x_,y_,z_) {}
 
 void Exhibit::update() {
 	int peopleLength = people.size();
@@ -6,6 +10,7 @@ void Exhibit::update() {
 		if (people.at(i)->move(&directions)) {
 			people.erase(people.begin() + i);
 			used--;
+			peopleLength--;
 		} else {
 			i++;
 		}
@@ -19,4 +24,8 @@ bool Exhibit::canEnter(int groupID) {
 void Exhibit::enter(Person* person) {
 	used++;
 	people.push_back(person);
+}
+
+void Exhibit::print() {
+	std::cout << "ID: " << nodeID << ". " << used << " people are currently here." << std::endl;
 }

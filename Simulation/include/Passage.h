@@ -1,16 +1,18 @@
 #pragma once
 
 #include <tuple>
-#include "Node.h"
-#include "Door.h"
 #include "Person.h"
+#include "Door.h"
 
 class Node;
-class Person;
 
 class Passage {
 	Door* door;
 	Node* node;
+
+public:
+	Passage();
+	Passage(Door*, Node*);
 
 	bool moveIfPossible(int, Person*);
 };

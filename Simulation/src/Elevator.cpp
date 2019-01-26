@@ -1,4 +1,5 @@
 #include "Node.h"
+#include "Person.h"
 
 void Elevator::update() {
 	if (moving) {
