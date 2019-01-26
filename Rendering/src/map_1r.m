@@ -9,7 +9,7 @@ f = imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\_1.j
 z=-1;
 image(f);
 hold on
-nid=11;
+nid=45;
 while 1
     t=str2num(cell2mat(inputdlg('Enter Node Type:')));
     if t
@@ -22,7 +22,7 @@ while 1
             [xd,yd]=ginput(2);
             dw=max(abs(xd(1)-xd(2)),abs(yd(1)-yd(2)))
         else
-            dw=str2num(cell2mat(inputdlg('Enter Door Width:','Input',[1 15],{'2'})));
+            dw=str2num(cell2mat(inputdlg('Enter Door Width:','Input',[1 20],{'2'})));
         end
     else
         nc=1;
@@ -36,7 +36,7 @@ while 1
         break
     end
     A=polyarea(x,y);
-    M_1(nid-10,1:15)=[nid,xc,yc,z,t,dw,A,x',y'];
+    M_1(nid-44,1:15)=[nid,xc,yc,z,t,dw,A,x',y'];
     nid=nid+1;
 end
 csvwrite('nodes_1.csv',M_1)
