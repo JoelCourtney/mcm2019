@@ -19,4 +19,4 @@ A=polyarea(x,y);
 nid=m+1;
 M(nid,1:15)=[nid,xc,yc,z,t,dw,A,x',y'];
 
-csvwrite('MasterNodes.csv',M)
+csvwrite('masternodes.csv',M)
