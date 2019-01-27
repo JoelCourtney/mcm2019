@@ -18,7 +18,7 @@ protected:
 public:
 	Node(int);
 
-	virtual void update() = 0;
+	virtual int update() = 0;
 	virtual bool canEnter(int) = 0;
 	virtual void enter(Person*) = 0;
 
@@ -26,6 +26,8 @@ public:
 	void changePreference(int);
 
 	virtual void print();
+	virtual void printExit() {};
+	virtual int getExited() {return 0;}
 	int getID();
 };
 
@@ -40,7 +42,7 @@ protected:
 public:
 	Exhibit(int,int);
 
-	virtual void update();
+	virtual int update();
 	virtual bool canEnter(int);
 	void enter(Person*);
 
@@ -74,11 +76,13 @@ class Exit: public Node {
 public:
 	Exit(int);
 
-	void update();
+	int update();
 	bool canEnter(int);
 	void enter(Person*);
 
 	void print();
+	void printExit();
+	int getExited();
 };
 
 class Elevator: public Node {
@@ -92,7 +96,7 @@ class Elevator: public Node {
 public:
 	Elevator(int,int,int);
 
-	void update();
+	int update();
 	bool canEnter(int);
 	void enter(Person*);
 
@@ -109,7 +113,7 @@ class Escalator: public Node {
 public:
 	Escalator(int,int,int);
 	
-	void update();
+	int update();
 	bool canEnter(int);
 	void enter(Person*);
 

@@ -44,9 +44,12 @@ void BasicGraph::print() {
 		nodes.at(i).print();
 	}
 	std::cout << "\nEdges:\n";
+	float count = 0;
 	for (int i = 0; i < edges.size(); i++) {
 		edges.at(i).print();
+		count += edges.at(i).distance;
 	}
+	std::cout << count << std::endl;
 }
 
 std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
@@ -99,12 +102,12 @@ std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
 }
 
 std::vector<std::tuple<int,float>> BasicGraph::dijkstra(int start, bool disabled) {
-	std::vector<int> distances(nodes.size(),10000000);
+	std::vector<float> distances(nodes.size(),-1);
 	std::vector<int> paths(nodes.size(),-1);
 	distances.at(start) = 0;
 	paths.at(start) = -2;
 	for (int i = 0; i < nodes.size() - 1; i++) {
-		float lowest = 10000000000000;
+		float lowest = 100000000000;
 		int lowestTo = -1;
 		int lowestFrom = -1;
 		for (int j = 0; j < nodes.size(); j++) {
@@ -126,17 +129,17 @@ std::vector<std::tuple<int,float>> BasicGraph::dijkstra(int start, bool disabled
 				}
 			}
 		}
-		if (lowestFrom == -1) {
+		if (lowestTo == -1) {
 			std::cout << "Graph is disconnected starting from " << start+1 << std::endl;
 			std::cout << "Untouched nodes:\n";
 			for (int j = 0; j < paths.size(); j++) {
 				if (paths.at(j) == -1) {
 					std::cout << j+1 << std::endl;
-					}
+				}
 			}
 			exit(-1);
 		}
-		distances.at(lowestFrom) = distances.at(lowestTo) + lowest;
+		distances.at(lowestFrom) = lowest;
 		paths.at(lowestFrom) = lowestTo;
 	}
 	std::vector<std::tuple<int,float>> result;
@@ -210,88 +213,44 @@ Graph BasicGraph::buildGraph() {
 			toDoors = toPair.first / toPair.second;
 			doorsLeft.at(e.toID) = std::pair<int,int>(toPair.first-toDoors,toPair.second-1);
 		}
-		std::cout << "From: " << from.nodeID << " To: " << to.nodeID << " | " << fromDoors << "," << toDoors << std::endl;
-		Node* fromPrev = start;
-		Room* r;
-		Door* d;
-		Passage backward;
-		Passage forward;
-		for (int j = 0; j < fromDoors; j++) {
-			r = new Room(nodeNumber++, from.area/from.type);
-			d = new Door(from.doorwidth);
-			backward = Passage(d,fromPrev);
-			forward = Passage(d,r);
-			r->addPassage(backward);
-			fromPrev->addPassage(forward);
-			if (normalChoice == 1) {
-				fromPrev->changePreference(0);
-			} else {
-				r->changePreference(0);
-			}
-			if (disabledChoice == 1) {
-				fromPrev->changePreference(1);
-			} else {
-				r->changePreference(1);
-			}
-			if (policeChoice == 1) {
-				fromPrev->changePreference(2);
-			} else {
-				r->changePreference(2);
-			}
-			static_cast<Exhibit*>(start)->addRoom(r);
-			g.addNode(r);
-			g.addDoor(d);
-			fromPrev = r;
+		std::vector<Node*> rooms;
+		rooms.push_back(start);
+		std::vector<Door*> doors;
+		for (int i = 0; i < fromDoors; i++) {
+			rooms.push_back(new Room(nodeNumber++, from.area/from.type));
+			doors.push_back(new Door(from.doorwidth));
 		}
-		Node* toPrev = end;
-		for (int j = 0; j < toDoors; j++) {
-			r = new Room(nodeNumber++, to.area/to.type);
-			d = new Door(to.doorwidth);
-			backward = Passage(d,toPrev);
-			forward = Passage(d,r);
-			r->addPassage(backward);
-			toPrev->addPassage(forward);
-			if (normalChoice == -1) {
-				fromPrev->changePreference(0);
-			} else {
-				r->changePreference(0);
-			}
-			if (disabledChoice == -1) {
-				fromPrev->changePreference(1);
-			} else {
-				r->changePreference(1);
-			}
-			if (policeChoice == -1) {
-				fromPrev->changePreference(2);
-			} else {
-				r->changePreference(2);
-			}
-			static_cast<Exhibit*>(end)->addRoom(r);
-			g.addNode(r);
-			g.addDoor(d);
-			toPrev = r;
+		doors.push_back(new Door((from.doorwidth + to.doorwidth)/2));
+		for (int i = 0; i < toDoors; i++) {
+			rooms.push_back(new Room(nodeNumber++, to.area/to.type));
+			doors.push_back(new Door(to.doorwidth));
 		}
-		d = new Door((from.doorwidth + to.doorwidth)/2);
-		backward = Passage(d,fromPrev);
-		forward = Passage(d,toPrev);
-		toPrev->addPassage(backward);
-		fromPrev->addPassage(forward);
-		if (normalChoice == 1) {
-			fromPrev->changePreference(0);
-		} else if (normalChoice == -1) {
-			toPrev->changePreference(0);
+		rooms.push_back(end);
+		for (int i = 0; i < doors.size(); i++) {
+			Passage forward(doors.at(i),rooms.at(i+1));
+			Passage backward(doors.at(i),rooms.at(i));
+			rooms.at(i)->addPassage(forward);
+			rooms.at(i+1)->addPassage(backward);
+			if (normalChoice == 1) rooms.at(i)->changePreference(0);
+			else if (normalChoice == -1) rooms.at(i+1)->changePreference(0);
+			else if (i < fromDoors) rooms.at(i+1)->changePreference(0);
+			else if (i > fromDoors) rooms.at(i)->changePreference(0);
+
+			if (disabledChoice == 1) rooms.at(i)->changePreference(1);
+			else if (disabledChoice == -1) rooms.at(i+1)->changePreference(1);
+			else if (i < fromDoors) rooms.at(i+1)->changePreference(1);
+			else if (i > fromDoors) rooms.at(i)->changePreference(1);
+
+			if (policeChoice == 1) rooms.at(i)->changePreference(2);
+			else if (policeChoice == -1) rooms.at(i+1)->changePreference(2);
+			else if (i < fromDoors) rooms.at(i+1)->changePreference(2);
+			else if (i > fromDoors) rooms.at(i)->changePreference(2);
 		}
-		if (disabledChoice == 1) {
-			fromPrev->changePreference(1);
-		} else if (disabledChoice == -1) {
-			toPrev->changePreference(1);
+		g.addDoor(doors.at(0));
+		for (int i = 1; i < doors.size(); i++) {
+			g.addNode(rooms.at(i));
+			g.addDoor(doors.at(i));
 		}
-		if (policeChoice == 1) {
-			fromPrev->changePreference(2);
-		} else if (policeChoice == -1) {
-			toPrev->changePreference(2);
-		}
-		g.addDoor(d);
 	}
 	return g;
 }

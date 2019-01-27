@@ -4,7 +4,7 @@
 
 Exhibit::Exhibit(int ID, int c) : capacity(c), Node(ID) {}
 
-void Exhibit::update() {
+int Exhibit::update() {
 	int peopleLength = people.size();
 	for (int i = 0; i < peopleLength;) {
 		if (people.at(i)->move(&directions)) {
@@ -15,6 +15,7 @@ void Exhibit::update() {
 			i++;
 		}
 	}
+	return used;
 }
 
 bool Exhibit::canEnter(int groupID) {

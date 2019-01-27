@@ -3,6 +3,10 @@
 #include <iostream>
 #include "Graph/Graph.h"
 #include "CSV/CSVReader.h"
+#include "CSV/CSVWriter.h"
+#include "Setup/Setup.h"
+#include <time.h>
+#include <stdlib.h>
 
 int main() {
 	//BasicNode n1(1.0, -1.0, 2);
@@ -24,7 +28,7 @@ int main() {
 	//Door* d1 = new Door(3);
 	//Door* d2 = new Door(3);
 	//Passage p1(d1, e);
-	//Passage p2(d2, m);
+	//Passage p2(d2, m);0
 	//Directions dir1;
 	//dir1.normal = p1;
 	//Directions dir2;
@@ -83,18 +87,20 @@ int main() {
 	//}
 	//g.print();
 	
-	CSVReader reader("../Rendering/MasterNodes.csv","../Rendering/MasterEdges.csv");
+	srand(time(NULL));
+	
+	CSVReader reader("../Rendering/exports/MasterNodes.csv","../Rendering/exports/MasterEdges.csv");
+	CSVWriter writer("../Rendering/imports/NaiveImplementation.csv");
 	BasicGraph bg = reader.buildBasicGraph();
-	bg.print();
-	Graph g = bg.buildGraph();
-		g.print();
-	//for (int i = 0; i < 10; i++) {
-		//Node* n = g.getNode(i);
-		//n->enter(new Tourist(0));
-	//}
-	//for (int i = 0; i < 90; i++) {
-		//g.print();
-		//g.update();
-	//}
-	g.print();
+	NaiveSetup setup(bg);
+	Graph g = setup.createInitialConditions();
+	int tick = 0;
+	while (g.getExited() < setup.peopleAdded()) {
+		tick++;
+		writer.nextLine(g.update());
+	}
+	writer.commit();
+	g.printExits();
+
+	std::cout << "Simulation took " << tick << " ticks to run.\n";
 };

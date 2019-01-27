@@ -16,7 +16,9 @@ public:
 
 	Node* getNode(int);
 
-	void update();
+	std::vector<int> update();
 
 	void print();
+	void printExits();
+	int getExited();
 };

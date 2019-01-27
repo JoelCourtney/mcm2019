@@ -4,11 +4,10 @@
 
 Escalator::Escalator(int ID, int cap, int lim): capacity(cap), waitLimit(lim), Node(ID) {}
 
-void Escalator::update() {
+int Escalator::update() {
 	int peopleLength = people.size();
 	for (int i = 0; i < peopleLength;) {
 		if (waitTimes.at(i) == waitLimit) {
-			std::cout << waitTimes.at(i) << std::endl;
 			if (people.at(i)->move(&directions)) {
 				people.erase(people.begin() + i);
 				waitTimes.erase(waitTimes.begin() + i);
@@ -22,6 +21,7 @@ void Escalator::update() {
 			i++;
 		}
 	}
+	return used;
 }
 
 bool Escalator::canEnter(int groupID) {

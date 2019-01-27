@@ -10,13 +10,17 @@ Graph::~Graph() {
 	}
 }
 
-void Graph::update() {
+std::vector<int> Graph::update() {
+	std::vector<int> data;
+	data.reserve(468);
 	for (int i = nodes.size() - 1; i >= 0; i--) {
-		nodes.at(i)->update();
+		int count = nodes.at(i)->update();
+		if (i < 468) data.push_back(count);
 	}
 	for (int i = 0; i < doors.size(); i++) {
 		doors.at(i)->reset();
 	}
+	return data;
 }
 
 
@@ -36,4 +40,18 @@ void Graph::print() {
 	for (int i = 0; i < nodes.size(); i++) {
 		nodes.at(i)->print();
 	}
+}
+
+void Graph::printExits() {
+	for (int i = 0; i < nodes.size(); i++) {
+		nodes.at(i)->printExit();
+	}
+}
+
+int Graph::getExited() {
+	int count = 0;
+	for (int i = 0; i < nodes.size(); i++) {
+		count += nodes.at(i)->getExited();
+	}
+	return count;
 }
