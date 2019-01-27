@@ -83,7 +83,7 @@ int main() {
 	//}
 	//g.print();
 	
-	CSVReader reader("../Rendering/nodes_2_10.csv","../Rendering/edges_2_10.csv");
+	CSVReader reader("../Rendering/MasterNodes.csv","../Rendering/MasterEdges.csv");
 	BasicGraph bg = reader.buildBasicGraph();
 	bg.print();
 	Graph g = bg.buildGraph();
