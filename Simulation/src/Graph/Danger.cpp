@@ -1,9 +1,11 @@
 #include "Graph/Node.h"
 
-void Danger::update() {
-	Exhibit::update();
+int Danger::getNumberOfPeople() {
+	return used;
 }
 
-bool Danger::canEnter(int groupID) {
-	return used < capacity;
+void Danger::print() {}
+
+bool Danger::isDangerous() {
+	return true;
 }

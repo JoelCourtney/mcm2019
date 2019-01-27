@@ -2,7 +2,7 @@
 #include "Person/Person.h"
 #include <iostream>
 
-Elevator::Elevator(int ID, float x_, float y_, float z_, int cap, int lim): capacity(cap), waitLimit(lim), Node(ID,x_,y_,z_) {}
+Elevator::Elevator(int ID, int cap, int lim): capacity(cap), waitLimit(lim), Node(ID) {}
 
 void Elevator::update() {
 	if (moving) {

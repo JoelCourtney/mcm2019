@@ -2,5 +2,5 @@
 #include "Graph/Directions.h"
 
 bool Police::move(Directions* dir) {
-	return dir->police.moveIfPossible(-1, this);
+	return dir->passages.at(dir->police).moveIfPossible(-1, this);
 }

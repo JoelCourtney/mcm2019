@@ -14,6 +14,8 @@ public:
 	void addNode(Node*);
 	void addDoor(Door*);
 
+	Node* getNode(int);
+
 	void update();
 
 	void print();

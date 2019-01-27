@@ -71,16 +71,17 @@ std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
 			std::tuple<int,float> path = choices.at(j).at(i);
 			if (std::get<1>(path) < dist) {
 				choice = std::get<0>(path);
-				dist = std::get<0>(path);
+				dist = std::get<1>(path);
 			}
 		}
+
 		int disabledChoice = -1;
 		dist = 1000000000;
 		for (int j = 0; j < disabledChoices.size(); j++) {
 			std::tuple<int,float> path = disabledChoices.at(j).at(i);
 			if (std::get<1>(path) < dist) {
 				disabledChoice = std::get<0>(path);
-				dist = std::get<0>(path);
+				dist = std::get<1>(path);
 			}
 		}
 		int policeChoice = -1;
@@ -89,7 +90,7 @@ std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
 			std::tuple<int,float> path = policeChoices.at(j).at(i);
 			if (std::get<1>(path) < dist) {
 				policeChoice = std::get<0>(path);
-				dist = std::get<0>(path);
+				dist = std::get<1>(path);
 			}
 		}
 		results.push_back(std::tuple<int,int,int>(choice,disabledChoice,policeChoice));
@@ -144,24 +145,147 @@ Graph BasicGraph::buildGraph() {
 	for (int i = 0; i < nodes.size(); i++) {
 		BasicNode bn = nodes.at(i);
 		if (bn.type > 0) {
-			Exhibit* e = new Exhibit(bn.nodeID,bn.x,bn.y,bn.z,(int)(bn.area/bn.type));
+			Exhibit* e = new Exhibit(bn.nodeID,(int)(bn.area/bn.type));
 			g.addNode(e);
 		} else if (bn.type == BasicNodeType::Exit) {
-			Exit* e = new Exit(bn.nodeID,bn.x,bn.y,bn.z);
+			Exit* e = new Exit(bn.nodeID);
 			g.addNode(e);
 		} else if (bn.type == BasicNodeType::Escalator) {
-			Escalator* e = new Escalator(bn.nodeID,bn.x,bn.y,bn.z,bn.area,20);
+			Escalator* e = new Escalator(bn.nodeID,bn.area,20);
 			g.addNode(e);
 		} else if (bn.type == BasicNodeType::Elevator || bn.type == BasicNodeType::DisabledElevator) {
-			Elevator* e = new Elevator(bn.nodeID,bn.x,bn.y,bn.z,8,20);
+			Elevator* e = new Elevator(bn.nodeID,8,20);
 			g.addNode(e);
 		}
 	}
-	auto paths = findPaths();
-	for (int i = 0; i < paths.size(); i++) {
-		auto t = paths.at(i);
-		std::cout << std::get<0>(t) << ","<<std::get<1>(t) << "," << std::get<2>(t)<<std::endl;
+	std::vector<std::pair<int,int>> doorsLeft(nodes.size());
+	for (int i = 0; i < nodes.size(); i++) {
+		doorsLeft.at(i) = std::pair<int,int>(nodes.at(i).type-1,nodes.at(i).adj.size());
 	}
-	std::cout << std::endl;
+	auto paths = findPaths();
+	int nodeNumber = nodes.back().nodeID + 1;
+	for (int i = 0; i < edges.size(); i++) {
+		BasicEdge e = edges.at(i);
+		BasicNode from = nodes.at(e.fromID);
+		BasicNode to = nodes.at(e.toID);
+		Node* start = g.getNode(from.nodeID);
+		Node* end = g.getNode(to.nodeID);
+		int normalChoice, disabledChoice, policeChoice;
+		if (std::get<0>(paths.at(from.nodeID)) == to.nodeID) {
+			normalChoice = 1;
+		} else if (std::get<0>(paths.at(to.nodeID)) == from.nodeID) {
+			normalChoice = -1;
+		} else {
+			normalChoice = 0;
+		}
+		if (std::get<1>(paths.at(from.nodeID)) == to.nodeID) {
+			disabledChoice = 1;
+		} else if (std::get<0>(paths.at(to.nodeID)) == from.nodeID) {
+			disabledChoice = -1;
+		} else {
+			disabledChoice = 0;
+		}
+		if (std::get<2>(paths.at(from.nodeID)) == to.nodeID) {
+			policeChoice = 1;
+		} else if (std::get<0>(paths.at(to.nodeID)) == from.nodeID) {
+			policeChoice = -1;
+		} else {
+			policeChoice = 0;
+		}
+		int fromDoors = 0;
+		if (from.type > 0) {
+			auto fromPair = doorsLeft.at(e.fromID);
+			fromDoors = fromPair.first / fromPair.second;
+			doorsLeft.at(e.fromID) = std::pair<int,int>(fromPair.first-fromDoors,fromPair.second-1);
+		}
+		int toDoors = 0;
+		if (to.type > 0) {
+			auto toPair = doorsLeft.at(e.toID);
+			toDoors = toPair.first / toPair.second;
+			doorsLeft.at(e.toID) = std::pair<int,int>(toPair.first-toDoors,toPair.second-1);
+		}
+		std::cout << "From: " << from.nodeID << " To: " << to.nodeID << " | " << fromDoors << "," << toDoors << std::endl;
+		Node* fromPrev = start;
+		Room* r;
+		Door* d;
+		Passage backward;
+		Passage forward;
+		for (int j = 0; j < fromDoors; j++) {
+			r = new Room(nodeNumber++, from.area/from.type);
+			d = new Door(from.doorwidth);
+			backward = Passage(d,fromPrev);
+			forward = Passage(d,r);
+			r->addPassage(backward);
+			fromPrev->addPassage(forward);
+			if (normalChoice == 1) {
+				fromPrev->changePreference(0);
+			} else {
+				r->changePreference(0);
+			}
+			if (disabledChoice == 1) {
+				fromPrev->changePreference(1);
+			} else {
+				r->changePreference(1);
+			}
+			if (policeChoice == 1) {
+				fromPrev->changePreference(2);
+			} else {
+				r->changePreference(2);
+			}
+			static_cast<Exhibit*>(start)->addRoom(r);
+			g.addNode(r);
+			g.addDoor(d);
+			fromPrev = r;
+		}
+		Node* toPrev = end;
+		for (int j = 0; j < toDoors; j++) {
+			r = new Room(nodeNumber++, to.area/to.type);
+			d = new Door(to.doorwidth);
+			backward = Passage(d,toPrev);
+			forward = Passage(d,r);
+			r->addPassage(backward);
+			toPrev->addPassage(forward);
+			if (normalChoice == -1) {
+				fromPrev->changePreference(0);
+			} else {
+				r->changePreference(0);
+			}
+			if (disabledChoice == -1) {
+				fromPrev->changePreference(1);
+			} else {
+				r->changePreference(1);
+			}
+			if (policeChoice == -1) {
+				fromPrev->changePreference(2);
+			} else {
+				r->changePreference(2);
+			}
+			static_cast<Exhibit*>(end)->addRoom(r);
+			g.addNode(r);
+			g.addDoor(d);
+			toPrev = r;
+		}
+		d = new Door((from.doorwidth + to.doorwidth)/2);
+		backward = Passage(d,fromPrev);
+		forward = Passage(d,toPrev);
+		toPrev->addPassage(backward);
+		fromPrev->addPassage(forward);
+		if (normalChoice == 1) {
+			fromPrev->changePreference(0);
+		} else if (normalChoice == -1) {
+			toPrev->changePreference(0);
+		}
+		if (disabledChoice == 1) {
+			fromPrev->changePreference(1);
+		} else if (disabledChoice == -1) {
+			toPrev->changePreference(1);
+		}
+		if (policeChoice == 1) {
+			fromPrev->changePreference(2);
+		} else if (policeChoice == -1) {
+			toPrev->changePreference(2);
+		}
+		g.addDoor(d);
+	}
 	return g;
 }

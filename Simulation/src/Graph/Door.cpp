@@ -1,12 +1,13 @@
 #include "Graph/Door.h"
 #include <stdlib.h>
+#include <iostream>
 
 Door::Door(int w) : width(w) {}
 
 bool Door::canMove(int groupID) {
-	if (!activeGroup || activeGroup == groupID)
+	if (!activeGroup || activeGroup == groupID) {
 		return used < width;
-	else {
+	} else {
 		if (std::rand() % 10 < bias) {
 			bias += 2;
 			return true;

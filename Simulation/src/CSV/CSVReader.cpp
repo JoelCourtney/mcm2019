@@ -50,9 +50,7 @@ CSVReader::NodeLine CSVReader::readNodeLine(std::string line) {
 	getline(lineStream, dump, ',');
 	nl.x = stof(dump);
 	getline(lineStream, dump, ',');
-	std::cout << "read " << dump << std::endl;
 	nl.y = stof(dump);
-	std::cout << "pasted " << nl.y << std::endl;
 	getline(lineStream, dump, ',');
 	nl.z = stof(dump);
 	getline(lineStream, dump, ',');

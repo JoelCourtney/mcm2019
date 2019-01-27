@@ -4,5 +4,5 @@
 DisabledTourist::DisabledTourist(int ID): Tourist(ID) {}
 
 bool DisabledTourist::move(Directions* dir) {
-	return dir->wheelchair.moveIfPossible(groupID, static_cast<Person*>(this));
+	return dir->passages.at(dir->disabled).moveIfPossible(groupID, static_cast<Person*>(this));
 }

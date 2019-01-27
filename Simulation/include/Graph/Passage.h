@@ -6,7 +6,7 @@
 
 class Node;
 
-class Passage {
+struct Passage {
 	Door* door;
 	Node* node;
 

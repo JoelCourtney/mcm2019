@@ -28,6 +28,10 @@ void Graph::addDoor(Door* d) {
 	doors.push_back(d);
 }
 
+Node* Graph::getNode(int n) {
+	return nodes.at(n);
+}
+
 void Graph::print() {
 	for (int i = 0; i < nodes.size(); i++) {
 		nodes.at(i)->print();

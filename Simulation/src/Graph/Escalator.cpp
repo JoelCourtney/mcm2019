@@ -2,7 +2,7 @@
 #include "Person/Person.h"
 #include <iostream>
 
-Escalator::Escalator(int ID, float x_, float y_, float z_, int cap, int lim): capacity(cap), waitLimit(lim), Node(ID,x_,y_,z_) {}
+Escalator::Escalator(int ID, int cap, int lim): capacity(cap), waitLimit(lim), Node(ID) {}
 
 void Escalator::update() {
 	int peopleLength = people.size();

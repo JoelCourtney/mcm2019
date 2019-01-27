@@ -10,45 +10,69 @@ class Person;
 class Node {
 protected:
 	int nodeID;
-	float x, y, z;
 
 	std::vector<Person*> people;
 
 	Directions directions;
 
 public:
-	Node(int,float,float,float);
+	Node(int);
 
 	virtual void update() = 0;
 	virtual bool canEnter(int) = 0;
 	virtual void enter(Person*) = 0;
 
-	void setDirections(Directions);
+	void addPassage(Passage);
+	void changePreference(int);
 
 	virtual void print();
+	int getID();
 };
 
 class Exhibit: public Node {
+	std::vector<Exhibit*> exhibits;
+
 protected:
 	int capacity;
 	int used = 0;
 	std::vector<std::tuple<int,int>> reserved;
 
 public:
-	Exhibit(int,float,float,float,int);
+	Exhibit(int,int);
 
 	virtual void update();
 	virtual bool canEnter(int);
 	void enter(Person*);
 
+	void addRoom(Exhibit*);
+
+	virtual void print();
+
+	virtual bool isDangerous();
+};
+
+class Room: public Exhibit {
+public:
+	Room(int,int);
+	int getNumberOfPeople();
 	void print();
+
+	bool isDangerous();
+};
+
+class Danger: public Exhibit {
+public:
+	int getNumberOfPeople();
+	void print();
+
+	bool isDangerous();
 };
 
 class Exit: public Node {
-	int used;
+	int used = 0;
 
 public:
-	Exit(int,float,float,float);
+	Exit(int);
 
 	void update();
 	bool canEnter(int);
@@ -57,22 +81,16 @@ public:
 	void print();
 };
 
-class Danger: Exhibit {
-	void update();
-	bool canEnter(int);
-	
-};
-
 class Elevator: public Node {
 	int capacity;
-	int used;
+	int used = 0;
 
 	int waitTime;
 	bool moving = false;
 	const int waitLimit;
 
 public:
-	Elevator(int,float,float,float,int,int);
+	Elevator(int,int,int);
 
 	void update();
 	bool canEnter(int);
@@ -83,13 +101,13 @@ public:
 
 class Escalator: public Node {
 	int capacity;
-	int used;
+	int used = 0;
 
 	const int waitLimit;
 	std::vector<int> waitTimes;
 
 public:
-	Escalator(int,float,float,float,int,int);
+	Escalator(int,int,int);
 	
 	void update();
 	bool canEnter(int);

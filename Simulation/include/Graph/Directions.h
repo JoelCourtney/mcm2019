@@ -1,10 +1,12 @@
 #pragma once
 
 #include <tuple>
+#include <vector>
 #include "Passage.h"
 
 struct Directions {
-	Passage normal;
-	Passage wheelchair;
-	Passage police;
+	std::vector<Passage> passages;
+	int normal;
+	int disabled;
+	int police;
 };

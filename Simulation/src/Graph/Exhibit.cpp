@@ -2,7 +2,7 @@
 #include "Person/Person.h"
 #include <iostream>
 
-Exhibit::Exhibit(int ID, float x_, float y_, float z_, int c) : capacity(c), Node(ID,x_,y_,z_) {}
+Exhibit::Exhibit(int ID, int c) : capacity(c), Node(ID) {}
 
 void Exhibit::update() {
 	int peopleLength = people.size();
@@ -26,7 +26,19 @@ void Exhibit::enter(Person* person) {
 	people.push_back(person);
 }
 
+void Exhibit::addRoom(Exhibit* e) {
+	exhibits.push_back(e);
+}
+
 void Exhibit::print() {
 	//if (people.size() > 0)
-		std::cout << "ID: " << nodeID << ". " << used << " people are currently here." << std::endl;
+	std::cout << "ID: " << nodeID << " | " << used;
+	for (int i = 0; i < directions.passages.size(); i++) {
+		std::cout << "->" << directions.passages.at(i).node->getID();
+	}
+	std::cout << " pref " << directions.normal << std::endl;
+}
+
+bool Exhibit::isDangerous() {
+	return false;
 }
