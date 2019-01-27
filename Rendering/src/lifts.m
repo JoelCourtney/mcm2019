@@ -16,14 +16,18 @@ im1 = imresize(imrotate(imread('../assets/_2.jpg'),-90),0.5);
 im2 = imresize(imrotate(imread('../assets/0.jpg'),-90),0.5);
 
 for r = 1:size(floor1,1)
-    shape = reshape(untwist([floor1(r,8:11);floor1(r,12:15)]),[1,8]);
-    im1 = insertShape(im1, 'FilledPolygon', shape);
-    im1 = insertText(im1, [mean(floor1(r,8:11)) mean(floor1(r,12:15))], num2str(floor1(r,1)),'AnchorPoint','Center','BoxOpacity',0);
+    if floor1(r,5) < 1
+        shape = reshape(untwist([floor1(r,8:11);floor1(r,12:15)]),[1,8]);
+        im1 = insertShape(im1, 'FilledPolygon', shape);
+        im1 = insertText(im1, [mean(floor1(r,8:11)) mean(floor1(r,12:15))], num2str(floor1(r,1)),'AnchorPoint','Center','BoxOpacity',0);
+    end
 end
 for r = 1:size(floor2,1)
-    shape = reshape(untwist([floor2(r,8:11);floor2(r,12:15)]),[1,8]);
-    im2 = insertShape(im2, 'FilledPolygon', shape);
-    im2 = insertText(im2, [mean(floor2(r,8:11)) mean(floor2(r,12:15))], num2str(floor2(r,1)),'AnchorPoint','Center','BoxOpacity',0);
+    if floor2(r,5) < 1
+        shape = reshape(untwist([floor2(r,8:11);floor2(r,12:15)]),[1,8]);
+        im2 = insertShape(im2, 'FilledPolygon', shape);
+        im2 = insertText(im2, [mean(floor2(r,8:11)) mean(floor2(r,12:15))], num2str(floor2(r,1)),'AnchorPoint','Center','BoxOpacity',0);
+    end
 end
 
 edgeList = [];

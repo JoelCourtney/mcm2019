@@ -104,7 +104,7 @@ std::vector<std::tuple<int,float>> BasicGraph::dijkstra(int start, bool disabled
 	distances.at(start) = 0;
 	paths.at(start) = -2;
 	for (int i = 0; i < nodes.size() - 1; i++) {
-		float lowest = 1000000000;
+		float lowest = 10000000000000;
 		int lowestTo = -1;
 		int lowestFrom = -1;
 		for (int j = 0; j < nodes.size(); j++) {
@@ -127,7 +127,7 @@ std::vector<std::tuple<int,float>> BasicGraph::dijkstra(int start, bool disabled
 			}
 		}
 		if (lowestFrom == -1) {
-			std::cout << "Graph is disconnected." << std::endl;
+			std::cout << "Graph is disconnected starting from " << start+1 << std::endl;
 			std::cout << "Untouched nodes:\n";
 			for (int j = 0; j < paths.size(); j++) {
 				if (paths.at(j) == -1) {

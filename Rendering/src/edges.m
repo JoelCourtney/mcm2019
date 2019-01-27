@@ -1,65 +1,57 @@
-clear all; clc;
+clc;
 
-spec= [77
-78
-79
-103
-104
-110
-134
-135
-136
-137
-138
-139
-187
-225
+spec = [
+468
+
 ];
 
-files = {''};
-pre = '../edges_2_10.csv';
+z=2;
+files = {'../MasterNodes.csv'};
+pre = '../MasterEdges.csv';
 pre = csvread(pre);
 
 floor = [];
 for file = 1:length(files)
-    floor = [floor; csvread(files{file})]
+    floor = [floor; csvread(files{file})];
 end
 
-im = imresize(imrotate(imread('../assets/0.jpg'),-90),0.5);
+im = imresize(imrotate(imread('../assets/2.jpg'),-90),0.5);
 
 
 for r = 1:size(floor,1)
-    if ismember(floor(r,1),spec) || true
-    shape = reshape(untwist([floor(r,8:11);floor(r,12:15)]),[1,8]);
-    if sum(shape) == 0
-        im = insertText(im, [floor(r,2) floor(r,3)], ['E' num2str(floor(r,1))],'AnchorPoint','Center','BoxOpacity',0);
-    else
-        im = insertShape(im, 'FilledPolygon', shape);
-        im = insertText(im, [mean(floor(r,8:11)) mean(floor(r,12:15))], num2str(floor(r,1)),'AnchorPoint','Center','BoxOpacity',0);
-    end
+    if floor(r,4) == z
+        if ismember(floor(r,1),spec)
+            shape = reshape(untwist([floor(r,8:11);floor(r,12:15)]),[1,8]);
+            if sum(shape) == 0
+                im = insertText(im, [floor(r,2) floor(r,3)], ['E' num2str(floor(r,1))],'AnchorPoint','Center','BoxOpacity',0);
+            else
+                im = insertShape(im, 'FilledPolygon', shape);
+                im = insertText(im, [mean(floor(r,8:11)) mean(floor(r,12:15))], num2str(floor(r,1)),'AnchorPoint','Center','BoxOpacity',0);
+            end
+        end
     end
 end
 
-% for r = 1:length(pre)
-%     first = pre(r,1);
-%     second = pre(r,2);
-%     disp(first)
-%     disp(second)
-%     firstShape = -1;
-%     secondShape = -1;
-%     for i = 1:size(floor,1)
-%         if floor(i,1) == first
-%             firstShape = [mean(floor(i,8:11)), mean(floor(i,12:15))];
-%         end
-%         if floor(i,1) == second
-%             secondShape = [mean(floor(i,8:11)), mean(floor(i,12:15))];
-%         end
-%     end
-%     if all(firstShape ~= -1) && all(secondShape ~= -1)
-%         disp("asdf")
-%         im = insertShape(im, 'Line', [firstShape, secondShape],'Color','black');
-%     end
-% end
+for r = 1:length(pre)
+    first = pre(r,1);
+    second = pre(r,2);
+    disp(first)
+    disp(second)
+    firstShape = -1;
+    secondShape = -1;
+    for i = 1:size(floor,1)
+        if floor(i,1) == first && floor(i,4) == z
+            firstShape = [mean(floor(i,8:11)), mean(floor(i,12:15))];
+        end
+        if floor(i,1) == second && floor(i,4) == z
+            secondShape = [mean(floor(i,8:11)), mean(floor(i,12:15))];
+        end
+    end
+    if all(firstShape ~= -1) && all(secondShape ~= -1)
+        disp("asdf")
+        im = insertShape(im, 'Line', [firstShape, secondShape],'Color','black');
+    end
+end
 
 image(im);
 
