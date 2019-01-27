@@ -128,6 +128,12 @@ std::vector<std::tuple<int,float>> BasicGraph::dijkstra(int start, bool disabled
 		}
 		if (lowestFrom == -1) {
 			std::cout << "Graph is disconnected." << std::endl;
+			std::cout << "Untouched nodes:\n";
+			for (int j = 0; j < paths.size(); j++) {
+				if (paths.at(j) == -1) {
+					std::cout << j+1 << std::endl;
+					}
+			}
 			exit(-1);
 		}
 		distances.at(lowestFrom) = distances.at(lowestTo) + lowest;

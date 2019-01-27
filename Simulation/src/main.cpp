@@ -83,18 +83,18 @@ int main() {
 	//}
 	//g.print();
 	
-	CSVReader reader("data/nodes.csv","data/edges.csv");
+	CSVReader reader("../Rendering/nodes_2_10.csv","../Rendering/edges_2_10.csv");
 	BasicGraph bg = reader.buildBasicGraph();
 	bg.print();
 	Graph g = bg.buildGraph();
 		g.print();
-	for (int i = 0; i < 10; i++) {
-		Node* n = g.getNode(i);
-		n->enter(new Tourist(0));
-	}
-	for (int i = 0; i < 90; i++) {
-		g.print();
-		g.update();
-	}
+	//for (int i = 0; i < 10; i++) {
+		//Node* n = g.getNode(i);
+		//n->enter(new Tourist(0));
+	//}
+	//for (int i = 0; i < 90; i++) {
+		//g.print();
+		//g.update();
+	//}
 	g.print();
 };
