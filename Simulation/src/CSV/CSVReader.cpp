@@ -26,7 +26,6 @@ BasicGraph CSVReader::buildBasicGraph() {
 			nodeLine.area,
 			nodeLine.doorwidth
 		);
-		std::cout << nodeLine.nodeID << std::endl;
 		g.addNode(n);
 	}
 
@@ -37,7 +36,7 @@ BasicGraph CSVReader::buildBasicGraph() {
 			edgeLine.fromID,
 			edgeLine.toID
 		);
-		std::cout << edgeLine.fromID << " " << edgeLine.toID << std::endl;
+		//std::cout << edgeLine.fromID << " " << edgeLine.toID << std::endl;
 		g.addEdge(e);
 	}
 	return g;
