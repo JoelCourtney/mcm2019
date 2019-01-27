@@ -87,10 +87,12 @@ int main() {
 	BasicGraph bg = reader.buildBasicGraph();
 	bg.print();
 	Graph g = bg.buildGraph();
-	for (int i = 0; i < 13; i++) {
-		g.getNode(i)->enter(new Tourist(0));
+		g.print();
+	for (int i = 0; i < 10; i++) {
+		Node* n = g.getNode(i);
+		n->enter(new Tourist(0));
 	}
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 90; i++) {
 		g.print();
 		g.update();
 	}
