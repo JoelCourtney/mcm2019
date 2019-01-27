@@ -1,0 +1,118 @@
+#pragma once
+
+#include "Person/PersonType.h"
+#include "Graph/Directions.h"
+#include <vector>
+#include <tuple>
+
+class Person;
+
+class Node {
+protected:
+	int nodeID;
+
+	std::vector<Person*> people;
+
+	Directions directions;
+
+public:
+	Node(int);
+
+	virtual void update() = 0;
+	virtual bool canEnter(int) = 0;
+	virtual void enter(Person*) = 0;
+
+	void addPassage(Passage);
+	void changePreference(int);
+
+	virtual void print();
+	int getID();
+};
+
+class Exhibit: public Node {
+	std::vector<Exhibit*> exhibits;
+
+protected:
+	int capacity;
+	int used = 0;
+	std::vector<std::tuple<int,int>> reserved;
+
+public:
+	Exhibit(int,int);
+
+	virtual void update();
+	virtual bool canEnter(int);
+	void enter(Person*);
+
+	void addRoom(Exhibit*);
+
+	virtual void print();
+
+	virtual bool isDangerous();
+};
+
+class Room: public Exhibit {
+public:
+	Room(int,int);
+	int getNumberOfPeople();
+	void print();
+
+	bool isDangerous();
+};
+
+class Danger: public Exhibit {
+public:
+	int getNumberOfPeople();
+	void print();
+
+	bool isDangerous();
+};
+
+class Exit: public Node {
+	int used = 0;
+
+public:
+	Exit(int);
+
+	void update();
+	bool canEnter(int);
+	void enter(Person*);
+
+	void print();
+};
+
+class Elevator: public Node {
+	int capacity;
+	int used = 0;
+
+	int waitTime;
+	bool moving = false;
+	const int waitLimit;
+
+public:
+	Elevator(int,int,int);
+
+	void update();
+	bool canEnter(int);
+	void enter(Person*);
+
+	void print();
+};
+
+class Escalator: public Node {
+	int capacity;
+	int used = 0;
+
+	const int waitLimit;
+	std::vector<int> waitTimes;
+
+public:
+	Escalator(int,int,int);
+	
+	void update();
+	bool canEnter(int);
+	void enter(Person*);
+
+	void print();
+};
+
