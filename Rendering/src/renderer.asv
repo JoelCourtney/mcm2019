@@ -7,29 +7,47 @@ f_1= imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\_1.
 f_2 = imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\_2.jpg'),-90),0.5);
 F={f_2,f_1,f0,f1,f2};
 
+simfile='C:\Users\Wil Boshell\mcm2019\Rendering\imports\NaiveSetup.csv';
 M=csvread('C:\Users\Wil Boshell\mcm2019\Rendering\exports\MasterNodes.csv');
-R=csvread('C:\Users\Wil Boshell\mcm2019\Rendering\imports\NaiveImplementation.csv');
+R=csvread(simfile);
 nt=size(R,1);
-ns=floor((nt-1)/100)+2;
+RAM=1.2*10^10;
+dmin=ceil(850*1150*3*nt*5/RAM);
+d=30;
+ns=floor((nt-1)/d)+2;
 t(1)=1;
 for i=1:ns-2
-    t(i+1)=100*i;
+    t(i+1)=d*i;
 end
 t(ns)=nt;
-ib=F{5};
-I=uint8(zeros(850,1100,3,ns));
-M=M(375:467,:);
-for r = 1:93
-    shape = reshape(untwist([M(r,8:11);M(r,12:15)]),[1,8]);
-    if sum(shape) == 0
-        ib = insertText(ib, [M(r,2) M(r,3)], ['E' num2str(M(r,1))],'AnchorPoint','Center','BoxOpacity',0);
-    else
-        ib = insertShape(ib, 'FilledPolygon', shape);
+nf=5;
+
+I=zeros([850,1100,3,ns,nf],'uint8');
+for l=1:5
+    N=[];
+    for i=1:size(M,1)
+        if M(i,4)==l-3
+            N=[N;M(i,:)];
+        end
+    end
+    nnodes=size(N,1);
+    for r = 1:nnodes
+        shape = reshape(untwist([N(r,8:11);N(r,12:15)]),[1,8]);
+        if sum(shape) == 0
+            ib = insertText(ib, [N(r,2) N(r,3)], ['E' num2str(N(r,1))],'AnchorPoint','Center','BoxOpacity',0);
+        else
+            ib = insertShape(ib, 'FilledPolygon', shape);
+        end
+    end
+    for i=1:ns
+        im=ib;
+        for r=375:467
+            im = insertText(im, [mean(M(r-374,8:11)) mean(M(r-374,12:15))], num2str(R(t(i),r)),'AnchorPoint','Center','BoxOpacity',0);
+        end
+        I(:,:,:,i,l)=im;
     end
 end
-im=ib;
-for i=i
-image(ib)
+
 
 function [shape] = untwist(shape)
 sides = [];
