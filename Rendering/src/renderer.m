@@ -7,13 +7,13 @@ f_1= imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\_1.
 f_2 = imresize(imrotate(imread('C:\Users\Wil Boshell\mcm2019\Rendering\assets\_2.jpg'),-90),0.5);
 F={f_2,f_1,f0,f1,f2};
 
-ufile=inputdlg('Enter File Name:') %Will add path name through imports\. No .csv necessary.
+ufile=inputdlg('Enter File Name:'); %Will add path name through imports\. No .csv necessary.
 simfile=strcat('C:\Users\Wil Boshell\mcm2019\Rendering\imports\',ufile{1},'.csv');
 M=csvread('C:\Users\Wil Boshell\mcm2019\Rendering\exports\MasterNodes.csv');
 R=csvread(simfile);
 nt=size(R,1);
-RAM=1.2*10^10;
-dmin=ceil(850*1150*3*nt*5/RAM);
+% RAM=1.2*10^10;
+% dmin=ceil(850*1150*3*nt*5/RAM);
 d=str2num(cell2mat(inputdlg('Enter Step Size:')));
 ns=floor((nt-1)/d)+2;
 t(1)=1;
@@ -44,7 +44,7 @@ for l=1:5
     for i=1:ns
         im=ib;
         for r=1:nnodes
-            im = insertText(im, [mean(N(r,8:11)) mean(N(r,12:15))], num2str(R(t(i),r)),'AnchorPoint','Center','BoxOpacity',0);
+            im = insertText(im, [mean(N(r,8:11)) mean(N(r,12:15))], num2str(R(t(i),N(r,1))),'AnchorPoint','Center','BoxOpacity',0);
         end
         I(:,:,:,i,l)=im;
     end
