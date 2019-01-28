@@ -6,7 +6,7 @@
 
 struct Directions {
 	std::vector<Passage> passages;
-	int normal;
-	int disabled;
-	int police;
+	int normal = 0;
+	int disabled = 0;
+	int police = 0;
 };

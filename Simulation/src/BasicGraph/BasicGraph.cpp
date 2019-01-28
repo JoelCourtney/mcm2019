@@ -17,7 +17,7 @@ void BasicGraph::addEdge(BasicEdge e) {
 	BasicNode to = nodes.at(e.toID);
 	float dx = from.x - to.x;
 	float dy = from.y - to.y;
-	float dz = from.z - to.z;
+	float dz = 10*(from.z - to.z);
 	e.distance = sqrt(dx*dx + dy*dy + dz*dz);
 	edges.push_back(e);
 	nodes.at(e.fromID).adj.push_back(edges.size()-1);
@@ -53,6 +53,7 @@ void BasicGraph::print() {
 }
 
 std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
+
 	std::vector<std::vector<std::tuple<int,float>>> choices;
 	std::vector<std::vector<std::tuple<int,float>>> disabledChoices;
 	std::vector<std::vector<std::tuple<int,float>>> policeChoices;
@@ -87,6 +88,7 @@ std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
 				dist = std::get<1>(path);
 			}
 		}
+		std::cout << "Choice at :" << i << " is " << disabledChoice << std::endl;
 		int policeChoice = -1;
 		dist = 1000000000;
 		for (int j = 0; j < policeChoices.size(); j++) {
@@ -102,7 +104,7 @@ std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
 }
 
 std::vector<std::tuple<int,float>> BasicGraph::dijkstra(int start, bool disabled) {
-	std::vector<float> distances(nodes.size(),-1);
+	std::vector<float> distances(nodes.size(),10000000000);
 	std::vector<int> paths(nodes.size(),-1);
 	distances.at(start) = 0;
 	paths.at(start) = -2;
@@ -113,24 +115,28 @@ std::vector<std::tuple<int,float>> BasicGraph::dijkstra(int start, bool disabled
 		for (int j = 0; j < nodes.size(); j++) {
 			if (paths.at(j) != -1) {
 				BasicNode cursor = nodes.at(j);
-				for (int k = 0; k < cursor.adj.size(); k++) {
-					int other;
-					BasicEdge e = edges.at(cursor.adj.at(k));
-					if (e.toID == j) {
-						other = e.fromID;
-					} else {
-						other = e.toID;
-					}
-					if (paths.at(other) == -1 && e.distance+distances.at(j) < lowest) {
-						lowest = e.distance + distances.at(j);
-						lowestTo = j;
-						lowestFrom = other;
+				//if (cursor.type == -3) std::cout << cursor.nodeID << std::endl;
+				if ((disabled && (cursor.type != -1)) || ((!disabled) && cursor.type != -3)) {
+				//if (cursor.type != -3) {
+					for (int k = 0; k < cursor.adj.size(); k++) {
+						int other;
+						BasicEdge e = edges.at(cursor.adj.at(k));
+						if (e.toID == j) {
+							other = e.fromID;
+						} else {
+							other = e.toID;
+						}
+						if (paths.at(other) == -1 && e.distance+distances.at(j) < lowest) {
+							lowest = e.distance + distances.at(j);
+							lowestTo = j;
+							lowestFrom = other;
+						}
 					}
 				}
 			}
 		}
 		if (lowestTo == -1) {
-			std::cout << "Graph is disconnected starting from " << start+1 << std::endl;
+			std::cout << "Graph is disconnected starting from " << start+1  << "as " << disabled << std::endl;
 			std::cout << "Untouched nodes:\n";
 			for (int j = 0; j < paths.size(); j++) {
 				if (paths.at(j) == -1) {
@@ -146,6 +152,12 @@ std::vector<std::tuple<int,float>> BasicGraph::dijkstra(int start, bool disabled
 	for (int i = 0; i < distances.size(); i++) {
 		result.push_back(std::tuple<int,float>(paths.at(i),distances.at(i)));
 	}
+	//if (!disabled && start != 0) {
+		//std::cout << "searching from " << start<< std::endl;
+		//for (int i = 0; i < distances.size(); i++) {
+			//std::cout << paths.at(i) << " ";
+		//}
+	//}
 	return result;
 }
 
@@ -154,16 +166,18 @@ Graph BasicGraph::buildGraph() {
 	for (int i = 0; i < nodes.size(); i++) {
 		BasicNode bn = nodes.at(i);
 		if (bn.type > 0) {
-			Exhibit* e = new Exhibit(bn.nodeID,(int)(bn.area/bn.type));
+			float a = bn.area/bn.type;
+			int cap = (a/9 > 2)?a/9:2;
+			Exhibit* e = new Exhibit(bn.nodeID,cap);
 			g.addNode(e);
 		} else if (bn.type == BasicNodeType::Exit) {
 			Exit* e = new Exit(bn.nodeID);
 			g.addNode(e);
 		} else if (bn.type == BasicNodeType::Escalator) {
-			Escalator* e = new Escalator(bn.nodeID,bn.area,20);
+			Escalator* e = new Escalator(bn.nodeID,bn.doorwidth,5);
 			g.addNode(e);
 		} else if (bn.type == BasicNodeType::Elevator || bn.type == BasicNodeType::DisabledElevator) {
-			Elevator* e = new Elevator(bn.nodeID,8,20);
+			Elevator* e = new Elevator(bn.nodeID,6,20);
 			g.addNode(e);
 		}
 	}

@@ -4,13 +4,18 @@
 #include <iostream>
 #include "Graph/Graph.h"
 #include "BasicGraph/BasicGraph.h"
+#include "CSV/Lines.h"
 
 class Setup {
 protected:
 	int people;
-	BasicGraph bg;
+	std::vector<NodeLine> nodes;
+	std::vector<EdgeLine> edges;
+
+	BasicGraph buildBasicGraph();
+
 public:
-	Setup(BasicGraph);
+	Setup(std::vector<NodeLine>,std::vector<EdgeLine>);
 	virtual Graph createInitialConditions() = 0;
 
 	int peopleAdded();
@@ -18,6 +23,30 @@ public:
 
 class NaiveSetup : public Setup {
 public:
-	NaiveSetup(BasicGraph);
+	NaiveSetup(std::vector<NodeLine>,std::vector<EdgeLine>);
+	Graph createInitialConditions();
+};
+
+class DisableElevators : public Setup {
+public:
+	DisableElevators(std::vector<NodeLine>,std::vector<EdgeLine>);
+	Graph createInitialConditions();
+};
+
+class AddGroups : public Setup {
+public:
+	AddGroups(std::vector<NodeLine>,std::vector<EdgeLine>);
+	Graph createInitialConditions();
+};
+
+class AddWheelchairs : public Setup {
+public:
+	AddWheelchairs(std::vector<NodeLine>,std::vector<EdgeLine>);
+	Graph createInitialConditions();
+};
+
+class AddDanger : public Setup {
+public:
+	AddDanger(std::vector<NodeLine>,std::vector<EdgeLine>);
 	Graph createInitialConditions();
 };

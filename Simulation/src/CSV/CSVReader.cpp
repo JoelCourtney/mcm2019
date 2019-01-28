@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <utility>
+#include <vector>
 
 CSVReader::CSVReader(std::string nodeName, std::string edgeName) {
 	std::ifstream nodeFile(nodeName);
@@ -11,38 +13,23 @@ CSVReader::CSVReader(std::string nodeName, std::string edgeName) {
 	edges.assign(std::istreambuf_iterator<char>(edgeFile), std::istreambuf_iterator<char>());
 }
 
-BasicGraph CSVReader::buildBasicGraph() {
-	BasicGraph g;
+std::pair<std::vector<NodeLine>,std::vector<EdgeLine>> CSVReader::read() {
 	std::istringstream nodeStream(nodes);
 	std::string line;
+	std::vector<NodeLine> nodeVec;
+	std::vector<EdgeLine> edgeVec;
 	while (std::getline(nodeStream,line)) {
-		NodeLine nodeLine = readNodeLine(line);
-		BasicNode n(
-			nodeLine.nodeID,
-			nodeLine.x,
-			nodeLine.y,
-			nodeLine.z,
-			nodeLine.type,
-			nodeLine.area,
-			nodeLine.doorwidth
-		);
-		g.addNode(n);
+		nodeVec.push_back(readNodeLine(line));
 	}
 
 	std::istringstream edgeStream(edges);
 	while (std::getline(edgeStream,line)) {
-		EdgeLine edgeLine = readEdgeLine(line);
-		BasicEdge e(
-			edgeLine.fromID,
-			edgeLine.toID
-		);
-		//std::cout << edgeLine.fromID << " " << edgeLine.toID << std::endl;
-		g.addEdge(e);
+		edgeVec.push_back(readEdgeLine(line));
 	}
-	return g;
+	return std::make_pair(nodeVec,edgeVec);
 }
 
-CSVReader::NodeLine CSVReader::readNodeLine(std::string line) {
+NodeLine CSVReader::readNodeLine(std::string line) {
 	NodeLine nl;
 	std::istringstream lineStream(line);
 	std::string dump;
@@ -63,7 +50,7 @@ CSVReader::NodeLine CSVReader::readNodeLine(std::string line) {
 	return nl;
 }
 
-CSVReader::EdgeLine CSVReader::readEdgeLine(std::string line) {
+EdgeLine CSVReader::readEdgeLine(std::string line) {
 	EdgeLine el;
 	std::istringstream lineStream(line);
 	std::string dump;
