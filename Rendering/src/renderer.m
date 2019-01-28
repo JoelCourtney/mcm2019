@@ -10,27 +10,34 @@ F={f_2,f_1,f0,f1,f2};
 M=csvread('C:\Users\Wil Boshell\mcm2019\Rendering\exports\MasterNodes.csv');
 R=csvread('C:\Users\Wil Boshell\mcm2019\Rendering\imports\NaiveImplementation.csv');
 nt=size(R,1);
-ns=floor((nt-1)/100)+2;
+d=10;
+ns=floor((nt-1)/d)+2;
 t(1)=1;
 for i=1:ns-2
-    t(i+1)=100*i;
+    t(i+1)=d*i;
 end
 t(ns)=nt;
-im=F{5};
-I=[];
-M=M(375:468,:);
+ib=F{5};
+I=uint8(zeros(850,1100,3,ns));
+M=M(375:467,:);
 for r = 1:93
     shape = reshape(untwist([M(r,8:11);M(r,12:15)]),[1,8]);
     if sum(shape) == 0
-        im = insertText(im, [M(r,2) M(r,3)], ['E' num2str(M(r,1))],'AnchorPoint','Center','BoxOpacity',0);
+        ib = insertText(ib, [M(r,2) M(r,3)], ['E' num2str(M(r,1))],'AnchorPoint','Center','BoxOpacity',0);
     else
-        im = insertShape(im, 'FilledPolygon', shape);
+        ib = insertShape(ib, 'FilledPolygon', shape);
     end
 end
-im = insertText(im, [mean(M(r,8:11)) mean(M(r,12:15))], num2str(R(1,469-r)),'AnchorPoint','Center','BoxOpacity',0);
-I=cat(4,I,im);
+for i=1:ns
+    im=ib;
+    for r=375:467
+        im = insertText(im, [mean(M(r-374,8:11)) mean(M(r-374,12:15))], num2str(R(t(i),469-r)),'AnchorPoint','Center','BoxOpacity',0);
+    end
+    %Mov(i)=im2frame(im);
+    I(:,:,:,i)=im;
+end
+%image(im)
 
-image(im)
 
 function [shape] = untwist(shape)
 sides = [];

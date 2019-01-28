@@ -16,19 +16,20 @@ for i=1:ns-2
     t(i+1)=100*i;
 end
 t(ns)=nt;
-im=F{5};
-I=[];
-M=M(375:468,:);
+ib=F{5};
+I=uint8(zeros(850,1100,3,ns));
+M=M(375:467,:);
 for r = 1:93
     shape = reshape(untwist([M(r,8:11);M(r,12:15)]),[1,8]);
     if sum(shape) == 0
-        im = insertText(im, [M(r,2) M(r,3)], ['E' num2str(M(r,1))],'AnchorPoint','Center','BoxOpacity',0);
+        ib = insertText(ib, [M(r,2) M(r,3)], ['E' num2str(M(r,1))],'AnchorPoint','Center','BoxOpacity',0);
     else
-        %
+        ib = insertShape(ib, 'FilledPolygon', shape);
     end
 end
-
-image(im)
+im=ib;
+for i=i
+image(ib)
 
 function [shape] = untwist(shape)
 sides = [];
