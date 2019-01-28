@@ -3,6 +3,9 @@ require(ggplot2)
 control = read.csv("data/control.csv",header=FALSE,sep=",")
 control$time = control$V1
 
+mean(control$time)
+sd(control$time)
+
 ggplot(control, aes(x=time)) +
   geom_histogram(binwidth=100) +
   xlab("Time Taken (ticks)") +
@@ -18,4 +21,13 @@ ggplot(vspeople, aes(x=people,y=time)) +
   geom_point(size=0.5) +
   ggtitle("Simulation Time vs Initial Number of People") +
   xlab("Initial People (people") +
+  ylab("Simulation Time (ticks)")
+
+vswait = read.csv("data/vswait.csv",header=FALSE,sep=",")
+vswait$time = vswait$V1
+vswait$wait = rep(seq(from=1,to=59,by=1),each=3)
+ggplot(vswait, aes(x=wait,y=time)) +
+  geom_point(size=0.5) +
+  ggtitle("Simulation Time vs Stair Traversal Time") +
+  xlab("Stair Traversal Time (ticks)") +
   ylab("Simulation Time (ticks)")

@@ -9,12 +9,13 @@
 #include <stdlib.h>
 #include "Constants.h"
 
-int target_people = 1000;
+int target_people = 9000;
+int stairWait = 1;
 
 int simulate(Simulation* sim) {
 	std::cout << "Constructing graph..." << std::endl;
-	std::cout << "Target is " << target_people << std::endl;
-	Graph g = sim->createInitialConditions(target_people);
+	std::cout << "Wait time is " << stairWait << std::endl;
+	Graph g = sim->createInitialConditions(target_people, stairWait);
 	std::cout << "Simulating...";
 	int tick;
 	for (tick = 0; tick < 1500000 && g.getExited() < sim->peopleAdded(); tick++) {
@@ -44,10 +45,8 @@ int main() {
 	std::cout << std::endl;
 	auto raw = reader.read();
 	Simulation* sim = new AddDanger(raw.first, raw.second);
-	for (target_people = 1000; target_people < 20000; target_people += 50) {
-			times.push_back(simulate(sim));
-	}
-	for (target_people = 20000; target_people <= 100000; target_people += 400) {
+	for (stairWait = 1; stairWait < 60; stairWait++) {
+		for (int i = 0; i < 3; i++)
 			times.push_back(simulate(sim));
 	}
 	delete sim;

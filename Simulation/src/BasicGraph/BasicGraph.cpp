@@ -166,7 +166,7 @@ std::vector<std::tuple<int,float>> BasicGraph::dijkstra(int start, bool disabled
 	return result;
 }
 
-Graph BasicGraph::buildGraph() {
+Graph BasicGraph::buildGraph(int stairWait) {
 	Graph g;
 	for (int i = 0; i < nodes.size(); i++) {
 		BasicNode bn = nodes.at(i);
@@ -184,7 +184,7 @@ Graph BasicGraph::buildGraph() {
 			Exit* e = new Exit(bn.nodeID);
 			g.addNode(e);
 		} else if (bn.type == BasicNodeType::Escalator) {
-			Escalator* e = new Escalator(bn.nodeID,bn.doorwidth,5);
+			Escalator* e = new Escalator(bn.nodeID,bn.doorwidth,stairWait);
 			g.addNode(e);
 		} else if (bn.type == BasicNodeType::Elevator || bn.type == BasicNodeType::DisabledElevator) {
 			Elevator* e = new Elevator(bn.nodeID,6,20);

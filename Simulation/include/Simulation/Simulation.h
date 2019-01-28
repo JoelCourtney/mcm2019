@@ -16,7 +16,7 @@ protected:
 
 public:
 	Simulation(std::vector<NodeLine>,std::vector<EdgeLine>);
-	virtual Graph createInitialConditions(int) = 0;
+	virtual Graph createInitialConditions(int,int) = 0;
 
 	virtual void perturb(Graph&, int) = 0;
 	int peopleAdded();
@@ -25,27 +25,27 @@ public:
 class NaiveSimulation : public Simulation {
 public:
 	NaiveSimulation(std::vector<NodeLine>,std::vector<EdgeLine>);
-	Graph createInitialConditions(int);
+	Graph createInitialConditions(int,int);
 	void perturb(Graph&, int);
 };
 
 class DisableElevators : public Simulation {
 public:
 	DisableElevators(std::vector<NodeLine>,std::vector<EdgeLine>);
-	Graph createInitialConditions(int);
+	Graph createInitialConditions(int,int);
 	void perturb(Graph&, int);
 };
 
 class AddGroups : public Simulation {
 public:
 	AddGroups(std::vector<NodeLine>,std::vector<EdgeLine>);
-	Graph createInitialConditions(int);
+	Graph createInitialConditions(int,int);
 	void perturb(Graph&, int);
 };
 class AddWheelchairs : public Simulation {
 public:
 	AddWheelchairs(std::vector<NodeLine>,std::vector<EdgeLine>);
-	Graph createInitialConditions(int);
+	Graph createInitialConditions(int,int);
 	void perturb(Graph&, int);
 };
 
@@ -54,13 +54,13 @@ class AddDanger : public Simulation {
 	std::vector<int> dangerNodes;
 public:
 	AddDanger(std::vector<NodeLine>,std::vector<EdgeLine>);
-	Graph createInitialConditions(int);
+	Graph createInitialConditions(int,int);
 	void perturb(Graph&, int);
 };
 
 class AddBias : public Simulation {
 public:
 	AddBias(std::vector<NodeLine>,std::vector<EdgeLine>);
-	Graph createInitialConditions(int);
+	Graph createInitialConditions(int,int);
 	void perturb(Graph&, int);
 };

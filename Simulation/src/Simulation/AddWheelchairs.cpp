@@ -4,7 +4,7 @@
 
 AddWheelchairs::AddWheelchairs(std::vector<NodeLine> n, std::vector<EdgeLine> e) : Simulation(n,e) {}
 
-Graph AddWheelchairs::createInitialConditions(int target) {
+Graph AddWheelchairs::createInitialConditions(int target, int stairWait) {
 	//for (int i = 0; i < edges.size(); i++) {
 		//EdgeLine e = edges.at(i);
 		//if (nodes.at(e.fromID).type == -2 && nodes.at(e.toID).type == -2) {
@@ -14,7 +14,7 @@ Graph AddWheelchairs::createInitialConditions(int target) {
 	//}
 	people = 0;
 	BasicGraph bg = buildBasicGraph();
-	Graph g = bg.buildGraph();
+	Graph g = bg.buildGraph(stairWait);
 	int groupID = 1;
 	while (people < target) {
 		int num;

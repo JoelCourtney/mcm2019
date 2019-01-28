@@ -4,7 +4,7 @@
 
 AddDanger::AddDanger(std::vector<NodeLine> n, std::vector<EdgeLine> e) : Simulation(n,e) {}
 
-Graph AddDanger::createInitialConditions(int target) {
+Graph AddDanger::createInitialConditions(int target, int stairWait) {
 	//for (int i = 0; i < edges.size(); i++) {
 		//EdgeLine e = edges.at(i);
 		//if (nodes.at(e.fromID).type == -2 && nodes.at(e.toID).type == -2) {
@@ -27,7 +27,7 @@ Graph AddDanger::createInitialConditions(int target) {
 		}
 	}
 
-	Graph g = bg.buildGraph();
+	Graph g = bg.buildGraph(stairWait);
 	int groupID = 1;
 	while (people < target) {
 		int num;
