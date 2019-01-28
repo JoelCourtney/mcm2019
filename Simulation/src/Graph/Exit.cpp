@@ -3,7 +3,6 @@
 
 Exit::Exit(int ID) : Node(ID) {}
 
-
 int Exit::update() {
 	for (int i = 0; i < people.size(); i++) {
 		delete people.at(i);

@@ -7,7 +7,6 @@ class Node;
 DisabledTourist::DisabledTourist(int ID): Tourist(ID) {}
 
 bool DisabledTourist::move(Directions* dir) {
-	std::cout << dir->disabled << std::endl;
 	if (dir->disabled < 0 || dir->disabled >= dir->passages.size()) {
 		std::cout << "Would like to go to " << dir->disabled << " but have to go to " << (dir->normal) << std::endl;
 		return dir->passages.at(dir->normal).moveIfPossible(groupID, static_cast<Person*>(this));
@@ -18,5 +17,11 @@ bool DisabledTourist::move(Directions* dir) {
 		//}
 	//}
 	//previous.push_back(dir->passages.at(dir->disabled).node);
-	return dir->passages.at(dir->disabled).moveIfPossible(groupID, static_cast<Person*>(this));
+	bool res = dir->passages.at(dir->disabled).moveIfPossible(groupID, static_cast<Person*>(this));
+	//if (!res) std::cout << "move failed\n";
+	return res;
+}
+
+int DisabledTourist::getType() {
+	return PersonType::Disabled;
 }

@@ -35,5 +35,5 @@ void Escalator::enter(Person* person) {
 }
 
 void Escalator::print() {
-	std::cout << "Escalator " << nodeID << " moving " << used << " people." << std::endl;
+	std::cout << "Escalator " << nodeID << " moving " << used << " people to " << directions.passages.at(directions.police).node->getID() << std::endl;
 }

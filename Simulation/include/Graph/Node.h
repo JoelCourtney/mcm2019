@@ -11,12 +11,12 @@ class Node {
 protected:
 	int nodeID;
 
-	std::vector<Person*> people;
 
+public:
 	Directions directions;
 
 
-public:
+	std::vector<Person*> people;
 	Node(int);
 
 	virtual int update() = 0;
@@ -33,15 +33,14 @@ public:
 };
 
 class Exhibit: public Node {
-	std::vector<Exhibit*> exhibits;
 
 protected:
+	std::vector<Exhibit*> exhibits;
 	int capacity;
 	int used = 0;
-	std::vector<std::tuple<int,int>> reserved;
 
-	virtual int getNumberOfPeople() {return used;}
 public:
+	virtual int getNumberOfPeople() {return used;}
 	Exhibit(int,int);
 
 	virtual int update();
@@ -65,11 +64,19 @@ public:
 };
 
 class Danger: public Exhibit {
+	int exited = 0;
 public:
+	Danger(int,int);
 	int getNumberOfPeople();
 	void print();
 
+	bool canEnter(int);
+
+	int update();
+
 	bool isDangerous();
+
+	int getExited();
 };
 
 class Exit: public Node {

@@ -1,13 +1,13 @@
-#include "Setup/Setup.h"
+#include "Simulation/Simulation.h"
 #include "CSV/Lines.h"
 
-Setup::Setup(std::vector<NodeLine> n,std::vector<EdgeLine> e) : nodes(n), edges(e) {}
+Simulation::Simulation(std::vector<NodeLine> n,std::vector<EdgeLine> e) : nodes(n), edges(e) {}
 
-int Setup::peopleAdded() {
+int Simulation::peopleAdded() {
 	return people;
 }
 
-BasicGraph Setup::buildBasicGraph() {
+BasicGraph Simulation::buildBasicGraph() {
 	BasicGraph bg;
 	for (int i = 0; i < nodes.size(); i++) {
 		NodeLine line = nodes.at(i);

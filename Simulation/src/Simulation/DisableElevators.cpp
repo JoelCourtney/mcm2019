@@ -1,9 +1,9 @@
 #include "Constants.h"
-#include "Setup/Setup.h"
+#include "Simulation/Simulation.h"
 
-DisableElevators::DisableElevators(std::vector<NodeLine> n, std::vector<EdgeLine> e) : Setup(n,e) {}
+DisableElevators::DisableElevators(std::vector<NodeLine> n, std::vector<EdgeLine> e) : Simulation(n,e) {}
 
-Graph DisableElevators::createInitialConditions() {
+Graph DisableElevators::createInitialConditions(int target) {
 	for (int i = 0; i < edges.size(); i++) {
 		EdgeLine e = edges.at(i);
 		if (nodes.at(e.fromID).type == -2 && nodes.at(e.toID).type == -2) {
@@ -11,7 +11,7 @@ Graph DisableElevators::createInitialConditions() {
 			i--;
 		}
 	}
-	people = TARGET_PEOPLE;
+	people = target;
 	BasicGraph bg = buildBasicGraph();
 	Graph g = bg.buildGraph();
 	for (int i = 0; i < people; i++) {
@@ -20,3 +20,5 @@ Graph DisableElevators::createInitialConditions() {
 	}
 	return g;
 }
+
+void DisableElevators::perturb(Graph& g, int tick) {}

@@ -2,4 +2,4 @@
 
 #define NUM_NODES 474
 
-#define TARGET_PEOPLE 9001
+static int TARGET_PEOPLE = 1000;

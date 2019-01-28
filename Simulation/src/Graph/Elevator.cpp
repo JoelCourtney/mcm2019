@@ -52,5 +52,5 @@ void Elevator::enter(Person* person) {
 }
 
 void Elevator::print() {
-	std::cout << "Elevator " << nodeID << " waiting " << waitTime << " with " << used << " people for " << directions.normal << std::endl;
+	std::cout << "Elevator " << nodeID << " waiting " << waitTime << " with " << used << " people for " << directions.passages.at(directions.disabled).node->getID() << std::endl;
 }

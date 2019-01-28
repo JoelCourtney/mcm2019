@@ -53,7 +53,6 @@ void BasicGraph::print() {
 }
 
 std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
-
 	std::vector<std::vector<std::tuple<int,float>>> choices;
 	std::vector<std::vector<std::tuple<int,float>>> disabledChoices;
 	std::vector<std::vector<std::tuple<int,float>>> policeChoices;
@@ -61,7 +60,7 @@ std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
 		if (nodes.at(i).type == BasicNodeType::Exit) {
 			choices.push_back(dijkstra(i, false));
 			disabledChoices.push_back(dijkstra(i, true));
-		} else if (nodes.at(i).type == BasicNodeType::Danger) {
+		} else if (nodes.at(i).dangerous) {
 			policeChoices.push_back(dijkstra(i,false));
 		} else {
 			continue;
@@ -88,7 +87,7 @@ std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
 				dist = std::get<1>(path);
 			}
 		}
-		std::cout << "Choice at :" << i << " is " << disabledChoice << std::endl;
+
 		int policeChoice = -1;
 		dist = 1000000000;
 		for (int j = 0; j < policeChoices.size(); j++) {
@@ -98,12 +97,18 @@ std::vector<std::tuple<int,int,int>> BasicGraph::findPaths() {
 				dist = std::get<1>(path);
 			}
 		}
+		//std::vector<int> asdf = {149,110};
+		//for (int j = 0; j < asdf.size(); j++) {
+			//if (asdf.at(j) == i)
+				//std::cout << "Choice at :" << i << " is " << disabledChoice << std::endl;
+		//}
 		results.push_back(std::tuple<int,int,int>(choice,disabledChoice,policeChoice));
 	}
 	return results;
 }
 
 std::vector<std::tuple<int,float>> BasicGraph::dijkstra(int start, bool disabled) {
+	bool avoidDanger = !(nodes.at(start).dangerous);
 	std::vector<float> distances(nodes.size(),10000000000);
 	std::vector<int> paths(nodes.size(),-1);
 	distances.at(start) = 0;
@@ -168,7 +173,12 @@ Graph BasicGraph::buildGraph() {
 		if (bn.type > 0) {
 			float a = bn.area/bn.type;
 			int cap = (a/9 > 2)?a/9:2;
-			Exhibit* e = new Exhibit(bn.nodeID,cap);
+			Exhibit* e;
+			if (!bn.dangerous)
+				e = new Exhibit(bn.nodeID,cap);
+			else {
+				e = new Danger(bn.nodeID,cap);
+			}
 			g.addNode(e);
 		} else if (bn.type == BasicNodeType::Exit) {
 			Exit* e = new Exit(bn.nodeID);
@@ -203,14 +213,14 @@ Graph BasicGraph::buildGraph() {
 		}
 		if (std::get<1>(paths.at(from.nodeID)) == to.nodeID) {
 			disabledChoice = 1;
-		} else if (std::get<0>(paths.at(to.nodeID)) == from.nodeID) {
+		} else if (std::get<1>(paths.at(to.nodeID)) == from.nodeID) {
 			disabledChoice = -1;
 		} else {
 			disabledChoice = 0;
 		}
 		if (std::get<2>(paths.at(from.nodeID)) == to.nodeID) {
 			policeChoice = 1;
-		} else if (std::get<0>(paths.at(to.nodeID)) == from.nodeID) {
+		} else if (std::get<2>(paths.at(to.nodeID)) == from.nodeID) {
 			policeChoice = -1;
 		} else {
 			policeChoice = 0;

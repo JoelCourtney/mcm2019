@@ -24,7 +24,6 @@ std::vector<int> Graph::update() {
 	return data;
 }
 
-
 void Graph::addNode(Node* n) {
 	nodes.push_back(n);
 }
