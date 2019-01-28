@@ -15,6 +15,7 @@ protected:
 
 	Directions directions;
 
+
 public:
 	Node(int);
 
@@ -39,6 +40,7 @@ protected:
 	int used = 0;
 	std::vector<std::tuple<int,int>> reserved;
 
+	virtual int getNumberOfPeople() {return used;}
 public:
 	Exhibit(int,int);
 

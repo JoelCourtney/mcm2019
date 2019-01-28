@@ -1,8 +1,10 @@
 #pragma once
 
 #include "PersonType.h"
+#include <vector>
 
 class Directions;
+class Node;
 
 class Person {
 public:
@@ -29,6 +31,7 @@ private:
 
 class DisabledTourist: public Tourist {
 	static const int type = PersonType::Disabled;
+	std::vector<Node*> previous;
 
 public:
 	DisabledTourist(int);

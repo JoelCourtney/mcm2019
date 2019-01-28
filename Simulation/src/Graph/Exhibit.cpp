@@ -15,6 +15,10 @@ int Exhibit::update() {
 			i++;
 		}
 	}
+	int count = used;
+	for (int i = 0; i < exhibits.size(); i++) {
+		count += exhibits.at(i)->getNumberOfPeople();
+	}
 	return used;
 }
 

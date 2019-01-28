@@ -1,10 +1,15 @@
 clc;
 
 spec = [
+236
+237
+377
+383
+
 
 ];
 
-z=1;
+z=2;
 files = {'../exports/MasterNodes.csv'};
 pre = '../exports/MasterEdges.csv';
 pre = csvread(pre);
@@ -14,7 +19,7 @@ for file = 1:length(files)
     floor = [floor; csvread(files{file})];
 end
 
-im = imresize(imrotate(imread('../assets/1.jpg'),-90),0.5);
+im = imresize(imrotate(imread('../assets/2.jpg'),-90),0.5);
 
 
 for r = 1:size(floor,1)

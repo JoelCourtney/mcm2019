@@ -2,29 +2,17 @@
 
 #include <string>
 #include "BasicGraph/BasicGraph.h"
+#include "CSV/Lines.h"
 
 class CSVReader {
 	std::string nodes;
 	std::string edges;
 
-	struct NodeLine {
-		int nodeID;
-		float x;
-		float y;
-		float z;
-		int type;
-		float area;
-		float doorwidth;
-	};
-	struct EdgeLine {
-		int fromID;
-		int toID;
-	};
 
 public:
 	CSVReader(std::string,std::string);
 
-	BasicGraph buildBasicGraph();
+	std::pair<std::vector<NodeLine>,std::vector<EdgeLine>> read();
 
 private:
 	NodeLine readNodeLine(std::string);

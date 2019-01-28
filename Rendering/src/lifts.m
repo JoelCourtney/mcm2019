@@ -1,7 +1,7 @@
 clear all; close all; clc;
 
-files1 = {'../nodes_2_official.csv'};
-files2 = {'../nodes0_official.csv'};
+files1 = {'../old/nodes_2_official.csv'};
+files2 = {'../old/nodes_1_official.csv'};
 
 floor1 = [];
 for file = 1:length(files1)
@@ -13,7 +13,7 @@ for file = 1:length(files2)
 end
 
 im1 = imresize(imrotate(imread('../assets/_2.jpg'),-90),0.5);
-im2 = imresize(imrotate(imread('../assets/0.jpg'),-90),0.5);
+im2 = imresize(imrotate(imread('../assets/_1.jpg'),-90),0.5);
 
 for r = 1:size(floor1,1)
     if floor1(r,5) < 1

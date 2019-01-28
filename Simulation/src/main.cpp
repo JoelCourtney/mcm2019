@@ -9,95 +9,20 @@
 #include <stdlib.h>
 
 int main() {
-	//BasicNode n1(1.0, -1.0, 2);
-	//BasicNode n2(-1.5,0,0);
-
-	//BasicGraph louvre;
-	//louvre.addNode(n1);
-	//louvre.addNode(n2);
-
-	//BasicEdge e1(10, 3, 5, EdgeType::Normal, louvre.getNode(0), louvre.getNode(1));
-
-	//louvre.addEdge(e1);
-
-	/////////////
-	
-	//Exhibit* n = new Exhibit(0, 0, 0, 0, 10);
-	//Escalator* e = new Escalator(0,0,0,0,5,5);
-	//Exit* m = new Exit(1, 1, 2, 0);
-	//Door* d1 = new Door(3);
-	//Door* d2 = new Door(3);
-	//Passage p1(d1, e);
-	//Passage p2(d2, m);0
-	//Directions dir1;
-	//dir1.normal = p1;
-	//Directions dir2;
-	//dir2.normal = p2;
-	//n->setDirections(dir1);
-	//e->setDirections(dir2);
-
-	//Graph g;
-	//g.addNode(m);
-	//g.addNode(n);
-	//g.addNode(e);
-	//g.addDoor(d1);
-	//g.addDoor(d2);
-
-	//Tourist* t1 = new Tourist(1);
-	//Tourist* t2 = new Tourist(1);
-	//Tourist* t3 = new Tourist(1);
-	//n->enter(t1);
-	//n->enter(t2);
-	//n->enter(t3);
-
-	//g.print();
-	//for (int i = 0; i < 20; i++) {
-		//g.update();
-		//g.print();
-	//}
-	
-	//Graph g;
-	//Exhibit* prev = new Exhibit(0,0,0,0,1001);
-	//for (int i = 0; i < 1000; i++) {
-		//prev->enter(new Tourist(0));
-	//}
-	//for (int i = 0; i < 1000; i++) {
-		//Exhibit* n = new Exhibit(i,0,0,0,10);
-		//Door* d = new Door(6);
-		//Passage p(d,n);
-		//Directions dir;
-		//dir.normal = p;
-		//prev->setDirections(dir);
-		//g.addNode(prev);
-		//g.addDoor(d);
-		//prev = n;
-	//}
-	//Exit* end = new Exit(1,1,2,0);
-	//Door* d = new Door(4);
-	//Passage p(d,end);
-	//Directions dir;
-	//dir.normal = p;
-	//prev->setDirections(dir);
-	//g.addNode(prev);
-	//g.addNode(end);
-	//g.addDoor(d);
-
-	//for (int i = 0; i < 10000; i++) {
-		//g.update();
-	//}
-	//g.print();
-	
 	srand(time(NULL));
 	
 	CSVReader reader("../Rendering/exports/MasterNodes.csv","../Rendering/exports/MasterEdges.csv");
-	CSVWriter writer("../Rendering/imports/NaiveImplementation.csv");
-	BasicGraph bg = reader.buildBasicGraph();
-	NaiveSetup setup(bg);
+	CSVWriter writer("../Rendering/imports/NaiveSetup.csv");
+	auto raw = reader.read();
+	AddWheelchairs setup(raw.first, raw.second);
 	Graph g = setup.createInitialConditions();
-	int tick = 0;
-	while (g.getExited() < setup.peopleAdded()) {
-		tick++;
+	int tick;
+	for (tick = 0; tick < 15000 && g.getExited() < setup.peopleAdded(); tick++) {
 		writer.nextLine(g.update());
+		if (tick % 1000 == 0) {
+			g.printExits();
+			std::cout << std::endl;
+		}
 	}
 	writer.commit();
 	g.printExits();

@@ -1,4 +1,4 @@
-edges = csvread('../MasterEdges.csv');
+edges = csvread('../exports/MasterEdges.csv');
 
 for i = 1:length(edges)
     pair = edges(i,:);
