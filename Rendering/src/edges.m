@@ -14,7 +14,7 @@ for file = 1:length(files)
     floor = [floor; csvread(files{file})];
 end
 
-im = imresize(imrotate(imread('../assets/_1.jpg'),-90),0.5);
+im = imresize(imrotate(imread('../assets/_1.jpg'),0),0.5);
 
 
 for r = 1:size(floor,1)
