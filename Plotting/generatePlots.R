@@ -22,6 +22,8 @@ ggplot(vspeople, aes(x=people,y=time)) +
   ggtitle("Simulation Time vs Initial Number of People") +
   xlab("Initial People (people") +
   ylab("Simulation Time (ticks)")
+mod = lm(vspeople$time ~ vspeople$people^2)
+summary(mod)
 
 vswait = read.csv("data/vswait.csv",header=FALSE,sep=",")
 vswait$time = vswait$V1
@@ -31,3 +33,14 @@ ggplot(vswait, aes(x=wait,y=time)) +
   ggtitle("Simulation Time vs Stair Traversal Time") +
   xlab("Stair Traversal Time (ticks)") +
   ylab("Simulation Time (ticks)")
+
+vsbias = read.csv("data/vsbias.csv",header=FALSE,sep=",")
+vsbias$time = vsbias$V1
+vsbias$bias = rep(seq(from=15,to=1,by=-1),each=5)
+ggplot(vsbias, aes(x=bias,y=time)) +
+  geom_point(size=0.5) +
+  geom_smooth() +
+  ggtitle("Simulation Time vs Room Distribution Bias") +
+  xlab("Room Distribution Bias (unitless)") +
+  ylab("Simulation Time (ticks)") +
+  ylim(4000,8000)
