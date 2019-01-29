@@ -10,12 +10,13 @@
 #include "Constants.h"
 
 int target_people = 9000;
-int stairWait = 1;
+int stairWait = 5;
+int bias = 10;
 
-int simulate(Simulation* sim) {
+int simulate(AddBias* sim) {
 	std::cout << "Constructing graph..." << std::endl;
-	std::cout << "Wait time is " << stairWait << std::endl;
-	Graph g = sim->createInitialConditions(target_people, stairWait);
+	std::cout << "Bias is " << bias << std::endl;
+	Graph g = sim->createInitialConditions2(target_people, stairWait, bias);
 	std::cout << "Simulating...";
 	int tick;
 	for (tick = 0; tick < 1500000 && g.getExited() < sim->peopleAdded(); tick++) {
@@ -44,9 +45,10 @@ int main() {
 	CSVWriter writer("../Rendering/imports/NaiveSetup.csv");
 	std::cout << std::endl;
 	auto raw = reader.read();
-	Simulation* sim = new AddDanger(raw.first, raw.second);
-	for (stairWait = 1; stairWait < 60; stairWait++) {
-		for (int i = 0; i < 3; i++)
+	AddBias* sim = new AddBias(raw.first, raw.second);
+	simulate(sim);
+	for (bias = 15; bias > 0; bias--) {
+		for (int i = 0; i < 5; i++)
 			times.push_back(simulate(sim));
 	}
 	delete sim;

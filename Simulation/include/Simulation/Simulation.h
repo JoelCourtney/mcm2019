@@ -62,5 +62,16 @@ class AddBias : public Simulation {
 public:
 	AddBias(std::vector<NodeLine>,std::vector<EdgeLine>);
 	Graph createInitialConditions(int,int);
+	Graph createInitialConditions2(int,int,int);
+	void perturb(Graph&, int);
+};
+
+class AddExits : public Simulation {
+	int countPolice = 0;
+	std::vector<int> dangerNodes;
+
+public:
+	AddExits(std::vector<NodeLine>,std::vector<EdgeLine>);
+	Graph createInitialConditions(int,int);
 	void perturb(Graph&, int);
 };
