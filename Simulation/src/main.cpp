@@ -3,98 +3,58 @@
 #include <iostream>
 #include "Graph/Graph.h"
 #include "CSV/CSVReader.h"
+#include "CSV/CSVWriter.h"
+#include "Simulation/Simulation.h"
+#include <time.h>
+#include <stdlib.h>
+#include "Constants.h"
+
+int target_people = 9000;
+int stairWait = 5;
+int bias = 10;
+
+int simulate(AddBias* sim) {
+	std::cout << "Constructing graph..." << std::endl;
+	std::cout << "Bias is " << bias << std::endl;
+	Graph g = sim->createInitialConditions2(target_people, stairWait, bias);
+	std::cout << "Simulating...";
+	int tick;
+	for (tick = 0; tick < 1500000 && g.getExited() < sim->peopleAdded(); tick++) {
+		sim->perturb(g, tick);
+		//writer.nextLine(g.update());
+		g.update();
+		if (tick % 500 == 0) {
+			//g.printExits();
+			std::cout << ".";
+			std::cout.flush();
+		}
+	}
+	std::cout << std::endl;
+	//writer.commit();
+	g.printExits();
+	std::cout << "Simulation took " << tick << " ticks to run.\n\n";
+	return tick;
+}
 
 int main() {
-	//BasicNode n1(1.0, -1.0, 2);
-	//BasicNode n2(-1.5,0,0);
+	srand(time(NULL));
 
-	//BasicGraph louvre;
-	//louvre.addNode(n1);
-	//louvre.addNode(n2);
-
-	//BasicEdge e1(10, 3, 5, EdgeType::Normal, louvre.getNode(0), louvre.getNode(1));
-
-	//louvre.addEdge(e1);
-
-	/////////////
+	std::vector<int> times;
 	
-	//Exhibit* n = new Exhibit(0, 0, 0, 0, 10);
-	//Escalator* e = new Escalator(0,0,0,0,5,5);
-	//Exit* m = new Exit(1, 1, 2, 0);
-	//Door* d1 = new Door(3);
-	//Door* d2 = new Door(3);
-	//Passage p1(d1, e);
-	//Passage p2(d2, m);
-	//Directions dir1;
-	//dir1.normal = p1;
-	//Directions dir2;
-	//dir2.normal = p2;
-	//n->setDirections(dir1);
-	//e->setDirections(dir2);
-
-	//Graph g;
-	//g.addNode(m);
-	//g.addNode(n);
-	//g.addNode(e);
-	//g.addDoor(d1);
-	//g.addDoor(d2);
-
-	//Tourist* t1 = new Tourist(1);
-	//Tourist* t2 = new Tourist(1);
-	//Tourist* t3 = new Tourist(1);
-	//n->enter(t1);
-	//n->enter(t2);
-	//n->enter(t3);
-
-	//g.print();
-	//for (int i = 0; i < 20; i++) {
-		//g.update();
-		//g.print();
-	//}
-	
-	//Graph g;
-	//Exhibit* prev = new Exhibit(0,0,0,0,1001);
-	//for (int i = 0; i < 1000; i++) {
-		//prev->enter(new Tourist(0));
-	//}
-	//for (int i = 0; i < 1000; i++) {
-		//Exhibit* n = new Exhibit(i,0,0,0,10);
-		//Door* d = new Door(6);
-		//Passage p(d,n);
-		//Directions dir;
-		//dir.normal = p;
-		//prev->setDirections(dir);
-		//g.addNode(prev);
-		//g.addDoor(d);
-		//prev = n;
-	//}
-	//Exit* end = new Exit(1,1,2,0);
-	//Door* d = new Door(4);
-	//Passage p(d,end);
-	//Directions dir;
-	//dir.normal = p;
-	//prev->setDirections(dir);
-	//g.addNode(prev);
-	//g.addNode(end);
-	//g.addDoor(d);
-
-	//for (int i = 0; i < 10000; i++) {
-		//g.update();
-	//}
-	//g.print();
-	
-	CSVReader reader("data/nodes.csv","data/edges.csv");
-	BasicGraph bg = reader.buildBasicGraph();
-	bg.print();
-	Graph g = bg.buildGraph();
-		g.print();
-	for (int i = 0; i < 10; i++) {
-		Node* n = g.getNode(i);
-		n->enter(new Tourist(0));
+	CSVReader reader("../Rendering/exports/MasterNodes.csv","../Rendering/exports/MasterEdges.csv");
+	CSVWriter writer("../Rendering/imports/NaiveSetup.csv");
+	std::cout << std::endl;
+	auto raw = reader.read();
+	AddBias* sim = new AddBias(raw.first, raw.second);
+	simulate(sim);
+	for (bias = 15; bias > 0; bias--) {
+		for (int i = 0; i < 5; i++)
+			times.push_back(simulate(sim));
 	}
-	for (int i = 0; i < 90; i++) {
-		g.print();
-		g.update();
+	delete sim;
+	std::cout << std::endl << "Runtime list:\n" << times.front();
+	for (int i = 1; i < times.size(); i++) {
+		std::cout << "\n" << times.at(i);
 	}
-	g.print();
-};
+	std::cout << std::endl;
+}

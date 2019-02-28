@@ -2,9 +2,9 @@
 #include "Person/Person.h"
 #include <iostream>
 
-Elevator::Elevator(int ID, int cap, int lim): capacity(cap), waitLimit(lim), Node(ID) {}
+Elevator::Elevator(int ID, int cap, int lim): capacity(cap), waitLimit(lim), Node(ID) {waitTime = 0;}
 
-void Elevator::update() {
+int Elevator::update() {
 	if (moving) {
 		if (waitTime == waitLimit) {
 			int peopleLength = people.size();
@@ -39,6 +39,7 @@ void Elevator::update() {
 			}
 		}
 	}
+	return used;
 }
 
 bool Elevator::canEnter(int groupID) {
@@ -51,5 +52,5 @@ void Elevator::enter(Person* person) {
 }
 
 void Elevator::print() {
-	std::cout << "Elevator " << nodeID << " waiting " << waitTime << " with " << used << " people." << std::endl;
+	std::cout << "Elevator " << nodeID << " waiting " << waitTime << " with " << used << " people for " << directions.passages.at(directions.disabled).node->getID() << std::endl;
 }

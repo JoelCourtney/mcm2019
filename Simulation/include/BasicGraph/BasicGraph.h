@@ -20,7 +20,7 @@ public:
 	int getIndexOfNode(int);
 	BasicNode* getNode(int);
 
-	Graph buildGraph();
+	Graph buildGraph(int);
 
 	void print();
 };

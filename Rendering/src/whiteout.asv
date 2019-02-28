@@ -1,0 +1,24 @@
+clear all; close all; clc;
+
+path='C:\Users\Wil Boshell\mcm2019\Rendering\assets\'
+f0 = imresize(imrotate(imread(strcat(path,'0orig.jpg')),-90),0.5);
+f1 = imresize(imrotate(imread(strcat(path,'1orig.jpg')),-90),0.5);
+f2 = imresize(imrotate(imread(strcat(path,'2orig.jpg')),-90),0.5);
+f_1= imresize(imrotate(imread(strcat(path,'_1orig.jpg')),-90),0.5);
+F={f_1,f0,f1,f2};
+im=image(F{1})
+[x,y]=ginput(4);
+for i=floor(min(y)):ceil(max(y))
+    for j=floor(min(x)):ceil(max(x))
+        im(i,j,:)=[255 255 255];
+    end
+end
+imwrite(i)
+for l=2:4
+    im=image(F{l})
+    for i=floor(min(y)):ceil(max(y))
+        for j=floor(min(x)):ceil(max(x))
+            im(i,j,:)=[255 255 255];
+        end
+    end
+end

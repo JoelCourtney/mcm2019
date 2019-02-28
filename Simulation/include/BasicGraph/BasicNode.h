@@ -8,8 +8,7 @@ namespace BasicNodeType {
 		Exit = 0,
 		Escalator = -1,
 		Elevator = -2,
-		DisabledElevator = -3,
-		Danger = -4
+		DisabledElevator = -3
 	};
 }
 
@@ -23,6 +22,7 @@ struct BasicNode {
 	float z;
 
 	int type;
+	bool dangerous = false;
 
 	float area;
 	float doorwidth;

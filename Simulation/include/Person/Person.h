@@ -1,16 +1,17 @@
 #pragma once
 
 #include "PersonType.h"
+#include <vector>
 
 class Directions;
+class Node;
 
 class Person {
 public:
 	virtual ~Person();
 
-	static const int type = PersonType::Undefined;
-
 	virtual bool move(Directions*) = 0;
+	virtual int getType() = 0;
 };
 
 class Tourist: public Person {
@@ -22,23 +23,23 @@ public:
 	~Tourist();
 
 private:
-	static const int type = PersonType::Normal;
-
 	bool move(Directions*);
+	int getType();
 };
 
 class DisabledTourist: public Tourist {
-	static const int type = PersonType::Disabled;
+	std::vector<Node*> previous;
 
 public:
 	DisabledTourist(int);
+	int getType();
 
 private:
 	bool move(Directions*);
 };
 
-class Police: Person {
-	static const int type = PersonType::Police;
-
+class Police: public Person {
+	public:
 	bool move(Directions*);
+	int getType();
 };

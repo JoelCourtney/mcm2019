@@ -1,5 +1,6 @@
 #include "Graph/Graph.h"
 #include <iostream>
+#include "Constants.h"
 
 Graph::~Graph() {
 	for (int i = 0; i < nodes.size(); i++) {
@@ -10,15 +11,18 @@ Graph::~Graph() {
 	}
 }
 
-void Graph::update() {
-	for (int i = nodes.size() - 1; i >= 0; i--) {
-		nodes.at(i)->update();
+std::vector<int> Graph::update() {
+	std::vector<int> data;
+	data.reserve(NUM_NODES);
+	for (int i = 0; i < nodes.size(); i++) {
+		int count = nodes.at(i)->update();
+		if (i < NUM_NODES) data.push_back(count);
 	}
 	for (int i = 0; i < doors.size(); i++) {
 		doors.at(i)->reset();
 	}
+	return data;
 }
-
 
 void Graph::addNode(Node* n) {
 	nodes.push_back(n);
@@ -36,4 +40,18 @@ void Graph::print() {
 	for (int i = 0; i < nodes.size(); i++) {
 		nodes.at(i)->print();
 	}
+}
+
+void Graph::printExits() {
+	for (int i = 0; i < nodes.size(); i++) {
+		nodes.at(i)->printExit();
+	}
+}
+
+int Graph::getExited() {
+	int count = 0;
+	for (int i = 0; i < nodes.size(); i++) {
+		count += nodes.at(i)->getExited();
+	}
+	return count;
 }

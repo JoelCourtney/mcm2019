@@ -11,14 +11,15 @@ class Node {
 protected:
 	int nodeID;
 
-	std::vector<Person*> people;
-
-	Directions directions;
 
 public:
+	Directions directions;
+
+
+	std::vector<Person*> people;
 	Node(int);
 
-	virtual void update() = 0;
+	virtual int update() = 0;
 	virtual bool canEnter(int) = 0;
 	virtual void enter(Person*) = 0;
 
@@ -26,21 +27,23 @@ public:
 	void changePreference(int);
 
 	virtual void print();
+	virtual void printExit() {};
+	virtual int getExited() {return 0;}
 	int getID();
 };
 
 class Exhibit: public Node {
-	std::vector<Exhibit*> exhibits;
 
 protected:
+	std::vector<Exhibit*> exhibits;
 	int capacity;
 	int used = 0;
-	std::vector<std::tuple<int,int>> reserved;
 
 public:
+	virtual int getNumberOfPeople() {return used;}
 	Exhibit(int,int);
 
-	virtual void update();
+	virtual int update();
 	virtual bool canEnter(int);
 	void enter(Person*);
 
@@ -61,11 +64,19 @@ public:
 };
 
 class Danger: public Exhibit {
+	int exited = 0;
 public:
+	Danger(int,int);
 	int getNumberOfPeople();
 	void print();
 
+	bool canEnter(int);
+
+	int update();
+
 	bool isDangerous();
+
+	int getExited();
 };
 
 class Exit: public Node {
@@ -74,11 +85,13 @@ class Exit: public Node {
 public:
 	Exit(int);
 
-	void update();
+	int update();
 	bool canEnter(int);
 	void enter(Person*);
 
 	void print();
+	void printExit();
+	int getExited();
 };
 
 class Elevator: public Node {
@@ -92,7 +105,7 @@ class Elevator: public Node {
 public:
 	Elevator(int,int,int);
 
-	void update();
+	int update();
 	bool canEnter(int);
 	void enter(Person*);
 
@@ -109,7 +122,7 @@ class Escalator: public Node {
 public:
 	Escalator(int,int,int);
 	
-	void update();
+	int update();
 	bool canEnter(int);
 	void enter(Person*);
 
